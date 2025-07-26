@@ -17,6 +17,14 @@ class ProfileUpdateRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
+            'username' => [
+                'required',
+                'string',
+                'min:4',
+                'max:100',
+                'alpha_num',
+                Rule::unique(User::class)->ignore($this->user()->id),
+            ],
             'email' => [
                 'required',
                 'string',
@@ -25,6 +33,12 @@ class ProfileUpdateRequest extends FormRequest
                 'max:255',
                 Rule::unique(User::class)->ignore($this->user()->id),
             ],
+            // 'avatar' => [
+            //     'nullable', // tidak wajib diisi
+            //     'image', // harus berupa gambar
+            //     'mimes:jpg,jpeg,png,webp',// format yang diperbolehkan
+            //     'max:20480', // maksimal ukuran file 20MB
+            // ],
         ];
     }
 }
