@@ -9,7 +9,7 @@
         <div class="p-6 flex gap-[16px]">
             <p class="text-[18px] text-dark-first">Works By : {{ Auth::user()->username }}</p>
         </div>
-        <x-partials-dashboard-work-create />
+        <x-partials.dashboard.work-create />
     </div>
     </div>
 </x-app-layout>

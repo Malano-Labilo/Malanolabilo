@@ -9,8 +9,17 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
+/**
+ * @method string input(string $key = null, $default = null)
+ * @method $this merge(array $input)
+ * @method array only(array|mixed $keys)
+ * @method bool boolean(string $key)
+ * @method string string(string $key)
+ * @method string ip()
+ */
 class LoginRequest extends FormRequest
 {
+    protected $user_type;
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -27,11 +36,18 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
+            'user_credentials' => ['required', 'string'],
             'password' => ['required', 'string'],
         ];
     }
 
+    protected function prepareForValidation(): void
+    {
+        $this->user_type = (filter_var($this->input('user_credentials'), FILTER_VALIDATE_EMAIL) ? 'email' : 'username');
+        $this->merge([
+            $this->user_type => $this->input('user_credentials')
+        ]);
+    }
     /**
      * Attempt to authenticate the request's credentials.
      *
@@ -41,11 +57,11 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
-            RateLimiter::hit($this->throttleKey());
+        if (! Auth::attempt($this->only($this->user_type, 'password'), $this->boolean('remember'))) {
+            RateLimiter::hit($this->throttleKey()); 
 
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                'user_credentials' => trans('auth.failed'),
             ]);
         }
 

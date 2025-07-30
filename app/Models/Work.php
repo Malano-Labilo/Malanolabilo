@@ -11,7 +11,7 @@ class Work extends Model
 {
     protected $fillable = ['title', 'slug', 'user_id', 'category_id', 'thumbnail', 'excerpt', 'link', 'has_page', 'description', 'published_at'];
     protected $casts = ['has_page' => 'boolean'];
-    protected $with = ['user', 'category'];
+    protected $with = ['user', 'category']; // untuk menghindari N+1 query problem yaitu dengan eager loading relasi user dan category
     public function user():BelongsTo{
         return $this->belongsTo(User::class);
 
@@ -19,7 +19,6 @@ class Work extends Model
     public function category():BelongsTo{
         return $this->belongsTo(Category::class);
     }
-
     
     #[Scope]
     public function filter(Builder $query, array $filters): Builder{

@@ -67,7 +67,7 @@
                     </div>
                 @endif
 
-                <x-table-works-table :works="$works" />
+                <x-tables.works :works="$works" />
             </div>
         </div>
     </div>

@@ -70,7 +70,7 @@
                         {{-- ------------ --}}
                     </form>
                 </div>
-                <x-partials-works-detail-work :work="$work" />
+                <x-partials.works.detail-work :work="$work" />
             </div>
         </div>
     </div>
