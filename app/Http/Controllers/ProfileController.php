@@ -36,23 +36,23 @@ class ProfileController extends Controller
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
         }
-
-        if($request->avatar){
-            if(!empty($request->user()->avatar)) {
-                // Hapus gambar lama jika ada
-                Storage::disk('public')->delete($request->user()->avatar);
-            }
-            $avatarData = json_decode($request->avatar, true);
-            $avatarPath = $avatarData['path'] ?? null;
-
-            if ($avatarPath && Str::startsWith($avatarPath, 'tmp/avatar')) {
-            $fileName = Str::after($avatarPath, 'tmp/avatar/');
-            Storage::disk('public')->move($avatarPath, 'img/avatar/' . $fileName);
-            $validatedData['avatar'] = 'img/avatar/' . $fileName;
-    }
-            // Storage::disk('public')->move($request->avatar, 'img/avatar/' . $pathImg); // Pindahkan file ke direktori yang diinginkan
-            // $validatedData['avatar'] = 'img/avatar/' . $pathImg; // Simpan path gambar ke dalam Avatar 
+        if($request->hasFile('avatar')){
+            $request->file('avatar')->storage('img', 'public');
         }
+        // if($request->avatar){
+        //     if(!empty($request->user()->avatar)) {
+        //         // Hapus gambar lama yang ada di storage jika ada
+        //         Storage::disk('public')->delete($request->user()->avatar);
+        //     }
+        //     $avatarData = json_decode($request->avatar, true);
+        //     $avatarPath = $avatarData['path'] ?? null;
+
+        //     if ($avatarPath && Str::startsWith($avatarPath, 'tmp/avatar')) {
+        //     $fileName = Str::after($avatarPath, 'tmp/avatar/');
+        //     Storage::disk('public')->move($avatarPath, 'img/avatar/' . $fileName);
+        //     $validatedData['avatar'] = 'img/avatar/' . $fileName;
+        //     }
+        // }
         $request->user()->update($validatedData);
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
