@@ -35,9 +35,9 @@ class ProfileUpdateRequest extends FormRequest
                 'max:255',
                 Rule::unique(User::class)->ignore($this->user()->id),
             ],
-            'avatar' => [
+            'avatar_temp_path' => [
                 'nullable', // tidak wajib diisi
-                'image', // harus berupa gambar
+                'image', // harus file jenis image
                 'mimes:jpg,jpeg,png,webp',// format yang diperbolehkan
                 'max:20480', // maksimal ukuran file 20MB
             ],
