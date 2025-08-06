@@ -23,11 +23,12 @@ const csrfToken = document
     .querySelector('meta[name="csrf-token"]')
     .getAttribute("content");
 
+//Filepond untuk input Avatar yang ada di form edit Profile
 document.addEventListener("DOMContentLoaded", () => {
-    const input = document.querySelector("#avatar");
-    if (!input) return;
+    const inputAvatar = document.querySelector("#avatar");
+    if (!inputAvatar) return;
 
-    FilePond.create(input, {
+    FilePond.create(inputAvatar, {
         allowMultiple: false,
         acceptedFileTypes: [
             "image/png",
@@ -37,16 +38,63 @@ document.addEventListener("DOMContentLoaded", () => {
         ],
         maxFileSize: "20MB",
         server: {
-            url: "/upload-avatar",
+            url: "upload-avatar",
             method: "POST",
             headers: {
                 "X-CSRF-TOKEN": csrfToken,
             },
-            // onload: (response) => {
-            //     const res = JSON.parse(response);
-            //     document.querySelector("#avatar").value = res.path;
-            //     return res.path;
-            // },
+        },
+        onload: (response) => {
+            try {
+                const res = JSON.parse(response);
+                document.querySelector("#avatar-path").value = res.path;
+                return res.path; // kirim kembali path agar bisa dibaca saat submit form
+            } catch (error) {
+                console.error("Invalid JSON response from Server", response);
+                console.error("Invalid JSON response dari Server", response);
+                return null;
+            }
+        },
+        onerror: (response) => {
+            console.error("Upload error:", response);
+        },
+    });
+});
+
+//Filepond untuk input Thumbnail yang ada di form edit
+document.addEventListener("DOMContentLoaded", () => {
+    const inputThumbnail = document.querySelector("#thumbnail");
+    if (!inputThumbnail) return;
+
+    FilePond.create(inputThumbnail, {
+        allowMultiple: false,
+        acceptedFileTypes: [
+            "image/png",
+            "image/jpeg",
+            "image/jpg",
+            "image/webp",
+        ],
+        maxFileSize: "20MB",
+        server: {
+            url: "upload-thumbnail",
+            method: "POST",
+            headers: {
+                "X-CSRF-TOKEN": csrfToken,
+            },
+        },
+        onload: (response) => {
+            try {
+                const res = JSON.parse(response);
+                document.querySelector("#thumbnail-path").value = res.path;
+                return res.path; // kirim kembali path agar bisa dibaca saat submit form
+            } catch (error) {
+                console.error("Invalid JSON response from Server", response);
+                console.error("Invalid JSON response dari Server", response);
+                return null;
+            }
+        },
+        onerror: (response) => {
+            console.error("Upload error:", response);
         },
     });
 });

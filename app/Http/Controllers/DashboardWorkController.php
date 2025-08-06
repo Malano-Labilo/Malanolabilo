@@ -135,7 +135,6 @@ class DashboardWorkController extends Controller
             // Cek apakah request mengandung path thumbnail baru (hasil dari FilePond)
         if($request->filled('thumbnail') && $request->thumbnail !== $work->thumbnail) {
             $oldThumbnail = $work->thumbnail;
-            $tempPath = $request->input('thumbnail');
             
             $thumbnailRaw = $request->thumbnail;
             $thumbnailPath = '';
@@ -150,10 +149,10 @@ class DashboardWorkController extends Controller
             }
 
             // Validasi bahwa path berasal dari direktori tmp/thumbnail
-        if ($thumbnailPath && Str::startsWith($thumbnailPath, 'tmp/thumbnail')) {
-        $fileName = Str::after($thumbnailPath, 'tmp/thumbnail/');
-        Storage::disk('public')->move($thumbnailPath, 'img/thumbnails/' . $fileName);
-        $data['thumbnail'] = 'img/thumbnails/' . $fileName;
+            if ($thumbnailPath && Str::startsWith($thumbnailPath, 'tmp/thumbnail')) {
+            $fileName = Str::after($thumbnailPath, 'tmp/thumbnail/');
+            Storage::disk('public')->move($thumbnailPath, 'img/thumbnails/' . $fileName);
+            $data['thumbnail'] = 'img/thumbnails/' . $fileName;
             
             // Hapus thumbnail lama jika ada
             if ($oldThumbnail && Storage::disk('public')->exists($oldThumbnail)) {

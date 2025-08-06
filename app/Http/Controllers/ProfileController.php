@@ -34,32 +34,33 @@ class ProfileController extends Controller
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {   
         $validatedData = $request->validated(); // Validasi data yang diterima dari request
-
-        // if($request->hasFile('avatar')){
-        //     if(!empty($request->user()->avatar)){
-        //         Storage::disk('public')->delete($request->user()->avatar);
-        //     }
-        //     $validatedData['avatar'] = $request->file('avatar')->store('img/avatar', 'public');
-        // }
+        
+        if ($request->user()->isDirty('email')) {
+            $request->user()->email_verified_at = null;
+        }
 
         if($request->avatar){
+            // Pengecekan apkah stringnya Valid JSON
+            $avatarData = json_decode($request->avatar, true); // decode jadi array
+            if(json_last_error() === JSON_ERROR_NONE && isset($avatarData['path'])){
+                $path = $avatarData['path'];
             if(!empty($request->user()->avatar)){
                 Storage::disk('public')->delete($request->user()->avatar);
             }
-            $newFileName = Str::after($request->avatar, 'tmp/');
-            
-            Storage::disk('public')->move($request->avatar, "img/$newFileName");
-            $validatedData['avatar'] = "img/$newFileName";
+            $newFileName = Str::after($path, 'tmp/avatar/');
+            Storage::disk('public')->move($path, "img/avatar/" . $newFileName);
+            $validatedData['avatar'] = "img/avatar/" . $newFileName;
+            }
         }
 
         $request->user()->update($validatedData);
-
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
     public function uploadAvatar(Request $request){
         if($request->hasFile('avatar')){
-            $request->file('avatar')->store('img/avatar', 'public');
+            $path = $request->file('avatar')->store('tmp/avatar', 'public');
+            return response()->json(['path'=>$path], 200);
         }
         return response()->json(['error' => 'No file uploaded'], 400);
     }

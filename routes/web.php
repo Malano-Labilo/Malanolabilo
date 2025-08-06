@@ -52,9 +52,6 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/upload-avatar', [ProfileController::class, 'uploadAvatar'])->name('profile.upload-avatar');
-    // Route::post('/upload-avatar', function(){
-    //     return 'ok';
-    // });
 });
 
 require __DIR__.'/auth.php';
