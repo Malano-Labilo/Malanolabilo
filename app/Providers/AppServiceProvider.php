@@ -37,9 +37,9 @@ class AppServiceProvider extends ServiceProvider
         Paginator::defaultSimpleView('vendor.pagination.simple-paginate');
 
         //Untuk konfigurasi di hosting infinityfree
-        $this->app->bind('path.public', function() {
-        return base_path();
-    });
+    //     $this->app->bind('path.public', function() {
+    //     return base_path();
+    //     });
 
     }
 }

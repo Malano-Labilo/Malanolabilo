@@ -98,3 +98,41 @@ document.addEventListener("DOMContentLoaded", () => {
         },
     });
 });
+
+//Filepond untuk input Thumbnail yang ada di form Create Work
+document.addEventListener("DOMContentLoaded", () => {
+    const inputThumbnail = document.querySelector("#thumbnail-create");
+    if (!inputThumbnail) return;
+
+    FilePond.create(inputThumbnail, {
+        allowMultiple: false,
+        acceptedFileTypes: [
+            "image/png",
+            "image/jpeg",
+            "image/jpg",
+            "image/webp",
+        ],
+        maxFileSize: "20MB",
+        server: {
+            url: "/dashboard/upload-thumbnail",
+            method: "POST",
+            headers: {
+                "X-CSRF-TOKEN": csrfToken,
+            },
+        },
+        onload: (response) => {
+            try {
+                const res = JSON.parse(response);
+                document.querySelector("#thumbnail-path").value = res.path;
+                return res.path; // kirim kembali path agar bisa dibaca saat submit form
+            } catch (error) {
+                console.error("Invalid JSON response from Server", response);
+                console.error("Invalid JSON response dari Server", response);
+                return null;
+            }
+        },
+        onerror: (response) => {
+            console.error("Upload error:", response);
+        },
+    });
+});

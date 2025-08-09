@@ -59,8 +59,9 @@
         <label for="thumbnail"
             class="w-fit max-w-[720px] block mb-2 text-sm font-medium @error('thumbnail') text-red-blue @else text-dark-first @enderror">Thumbnail
             : </label>
-        <input id="thumbnail" name="thumbnail" type="file" placeholder="Type thumbnail..." class="cursor-pointer"
-            value="" />
+        <input id="thumbnail-path" name="thumbnail" type="hidden">
+        <input id="thumbnail-create" name="thumbnail" type="file" placeholder="Type thumbnail..."
+            class="cursor-pointer" value="" />
         @error('thumbnail')
             <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
         @enderror
@@ -137,5 +138,6 @@
 </form>
 
 @push('scripts')
+    @vite('resources/js/filepond.js')
     @vite('resources/js/quill.js')
 @endpush

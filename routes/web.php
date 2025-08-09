@@ -9,7 +9,7 @@ use Illuminate\Auth\Middleware\Authenticate;
 
 //Halaman Home
 Route::get('/', function () {
-    return view('pages.home',[
+    return view('pages.home', [
         'title' => 'Home',
     ]);
 })->name('home');
@@ -33,12 +33,13 @@ Route::get('/works/{work:slug}', [WorkController::class, 'work'])->name('works.w
 //     ]);
 // })->name('contact');
 
-    Route::get(env('SECRET_LOGIN_PATH', 'login-dimension-admin'), [AuthenticatedSessionController::class, 'create'])->middleware(['guest', 'secret.login.access'])->name('login');
-    Route::post(env('SECRET_LOGIN_PATH', 'login-dimension-admin'), [AuthenticatedSessionController::class, 'store'])->middleware('guest')->name('login.store');
+Route::get(env('SECRET_LOGIN_PATH', 'login-dimension-admin'), [AuthenticatedSessionController::class, 'create'])->middleware(['guest', 'secret.login.access'])->name('login');
+Route::post(env('SECRET_LOGIN_PATH', 'login-dimension-admin'), [AuthenticatedSessionController::class, 'store'])->middleware('guest')->name('login.store');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardWorkController::class, 'index'])->name('dashboard');
     Route::post('/dashboard', [DashboardWorkController::class, 'store'])->name('dashboard.store');
+    Route::post('/dashboard/upload-thumbnail', [DashboardWorkController::class, 'uploadThumbnail'])->name('dashboard.store.upload-thumbnail');
     Route::get('/dashboard/create', [DashboardWorkController::class, 'create'])->name('dashboard.work.create');
     Route::delete('/dashboard/{work:slug}', [DashboardWorkController::class, 'destroy'])->name('dashboard.work.destroy');
     Route::get('/dashboard/{work:slug}/edit', [DashboardWorkController::class, 'edit'])->name('dashboard.work.edit');
@@ -54,4 +55,4 @@ Route::middleware('auth')->group(function () {
     Route::post('/upload-avatar', [ProfileController::class, 'uploadAvatar'])->name('profile.upload-avatar');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
