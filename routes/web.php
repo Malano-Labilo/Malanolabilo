@@ -53,6 +53,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/upload-avatar', [ProfileController::class, 'uploadAvatar'])->name('profile.upload-avatar');
+    Route::post('/delete-temp-avatar', [ProfileController::class, 'deleteTempAvatar'])->name('profile.delete-temp-avatar');
 });
 
 require __DIR__ . '/auth.php';

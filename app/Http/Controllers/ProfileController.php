@@ -29,27 +29,27 @@ class ProfileController extends Controller
      * Update the user's profile information.
      * 
      * @param \Illuminate\Http\Request $request
-    * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
-    {   
+    {
         $validatedData = $request->validated(); // Validasi data yang diterima dari request
-        
+
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
         }
 
-        if($request->avatar){
+        if ($request->avatar) {
             // Pengecekan apkah stringnya Valid JSON
             $avatarData = json_decode($request->avatar, true); // decode jadi array
-            if(json_last_error() === JSON_ERROR_NONE && isset($avatarData['path'])){
+            if (isset($avatarData['path'])) {
                 $path = $avatarData['path'];
-            if(!empty($request->user()->avatar)){
-                Storage::disk('public')->delete($request->user()->avatar);
-            }
-            $newFileName = Str::after($path, 'tmp/avatar/');
-            Storage::disk('public')->move($path, "img/avatar/" . $newFileName);
-            $validatedData['avatar'] = "img/avatar/" . $newFileName;
+                if (!empty($request->user()->avatar)) {
+                    Storage::disk('public')->delete($request->user()->avatar);
+                }
+                $newFileName = Str::after($path, 'tmp/avatar/');
+                Storage::disk('public')->move($path, "img/avatar/" . $newFileName);
+                $validatedData['avatar'] = "img/avatar/" . $newFileName;
             }
         }
 
@@ -57,12 +57,23 @@ class ProfileController extends Controller
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
-    public function uploadAvatar(Request $request){
-        if($request->hasFile('avatar')){
+    public function uploadAvatar(Request $request)
+    {
+        if ($request->hasFile('avatar')) {
             $path = $request->file('avatar')->store('tmp/avatar', 'public');
-            return response()->json(['path'=>$path], 200);
+            return response()->json(['path' => $path], 200);
         }
         return response()->json(['error' => 'No file uploaded'], 400);
+    }
+
+    public function deleteTempAvatar(Request $request)
+    {
+        $path = $request->input('path');
+        if ($path && Storage::disk('public')->exists($path)) {
+            Storage::disk('public')->delete($path);
+            return response()->json(['deleted' => true]);
+        }
+        return response()->json(['deleted' => false]);
     }
 
     public function destroy(Request $request): RedirectResponse

@@ -55,6 +55,20 @@ document.addEventListener("DOMContentLoaded", () => {
                 return null;
             }
         },
+        //Hapus file sebelumnya saat ganti avatar
+        onremovefile: (error, file) => {
+            const oldPath = document.querySelector("#avatar-path").value;
+            if (oldPath) {
+                fetch("/delete-temp-avatar", {
+                    method: "POST",
+                    headers: {
+                        "X-CSRF-TOKEN": csrfToken,
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ path: oldPath }),
+                });
+            }
+        },
         onerror: (response) => {
             console.error("Upload error:", response);
         },

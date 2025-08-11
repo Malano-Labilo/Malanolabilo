@@ -58,7 +58,7 @@ class LoginRequest extends FormRequest
         $this->ensureIsNotRateLimited();
 
         if (! Auth::attempt($this->only($this->user_type, 'password'), $this->boolean('remember'))) {
-            RateLimiter::hit($this->throttleKey()); 
+            RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
                 'user_credentials' => trans('auth.failed'),
@@ -96,6 +96,6 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
+        return Str::transliterate(Str::lower($this->string('email')) . '|' . $this->ip());
     }
 }

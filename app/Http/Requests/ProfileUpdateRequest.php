@@ -3,8 +3,13 @@
 namespace App\Http\Requests;
 
 use App\Models\User;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\Request;
+
 /**
  * @method \App\Models\User user
  */
@@ -35,12 +40,23 @@ class ProfileUpdateRequest extends FormRequest
                 'max:255',
                 Rule::unique(User::class)->ignore($this->user()->id),
             ],
-            'avatar_temp_path' => [
-                'nullable', // tidak wajib diisi
-                'image', // harus file jenis image
-                'mimes:jpg,jpeg,png,webp',// format yang diperbolehkan
-                'max:20480', // maksimal ukuran file 20MB
-            ],
+            'avatar' => ['nullable', 'string'],
         ];
+    }
+    protected function failedValidation(Validator $validator)
+    {
+        /** @var \Illuminate\Http\Request $this */
+        $avatarData = json_decode($this->input('avatar'), true); // decode jadi array
+        $path = $avatarData['path'];
+        // Pastikan path tidak null dan file ada di storage
+        if ($path && Storage::disk('public')->exists($path)) {
+            Storage::disk('public')->delete($path);
+        }
+        // Lanjutkan flow default: redirect dengan error
+        throw new HttpResponseException(
+            redirect()->back()
+                ->withErrors($validator)
+                ->withInput()
+        );
     }
 }
