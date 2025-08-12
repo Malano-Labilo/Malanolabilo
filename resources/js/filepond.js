@@ -38,39 +38,53 @@ document.addEventListener("DOMContentLoaded", () => {
         ],
         maxFileSize: "20MB",
         server: {
-            url: "upload-avatar",
-            method: "POST",
-            headers: {
-                "X-CSRF-TOKEN": csrfToken,
+            process: {
+                url: "upload-avatar",
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": csrfToken,
+                },
+
+                onload: (response) => {
+                    try {
+                        const res = JSON.parse(response);
+                        document.querySelector("#avatar-path").value = res.path;
+                        return res.path; // kirim kembali path agar bisa dibaca saat submit form
+                    } catch (error) {
+                        console.error(
+                            "Invalid JSON response from Server",
+                            response
+                        );
+                        console.error(
+                            "Invalid JSON response dari Server",
+                            response
+                        );
+                        return null;
+                    }
+                },
             },
-        },
-        onload: (response) => {
-            try {
-                const res = JSON.parse(response);
-                document.querySelector("#avatar-path").value = res.path;
-                return res.path; // kirim kembali path agar bisa dibaca saat submit form
-            } catch (error) {
-                console.error("Invalid JSON response from Server", response);
-                console.error("Invalid JSON response dari Server", response);
-                return null;
-            }
-        },
-        //Hapus file sebelumnya saat ganti avatar
-        onremovefile: (error, file) => {
-            const oldPath = document.querySelector("#avatar-path").value;
-            if (oldPath) {
-                fetch("/delete-temp-avatar", {
-                    method: "POST",
+
+            revert: (uniqueFileId, load, error) => {
+                fetch("/delete-avatar", {
+                    method: "DELETE",
                     headers: {
                         "X-CSRF-TOKEN": csrfToken,
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({ path: oldPath }),
-                });
-            }
-        },
-        onerror: (response) => {
-            console.error("Upload error:", response);
+                    body: JSON.stringify({ path: uniqueFileId }),
+                })
+                    .then((res) => {
+                        if (!res.ok) throw new Error("Failed to delete");
+                        return res.json();
+                    })
+                    .then(() => {
+                        load(); // kasih tahu FilePond kalau sukses
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                        error("Error deleting file");
+                    });
+            },
         },
     });
 });

@@ -66,14 +66,21 @@ class ProfileController extends Controller
         return response()->json(['error' => 'No file uploaded'], 400);
     }
 
-    public function deleteTempAvatar(Request $request)
+    public function deleteAvatar(Request $request): JsonResponse
     {
+        // FilePond akan mengirim nama/path file yang diupload
         $path = $request->input('path');
-        if ($path && Storage::disk('public')->exists($path)) {
-            Storage::disk('public')->delete($path);
-            return response()->json(['deleted' => true]);
+        if (!$path) {
+            return response()->json(['error' => 'No file specified'], 400);
         }
-        return response()->json(['deleted' => false]);
+
+        // Pastikan file ada di disk public
+        if (Storage::disk('public')->exists($path)) {
+            Storage::disk('public')->delete($path);
+            return response()->json(['status' => 'success', 'message' => 'File deleted']);
+        }
+
+        return response()->json(['error' => 'File not found'], 404);
     }
 
     public function destroy(Request $request): RedirectResponse
