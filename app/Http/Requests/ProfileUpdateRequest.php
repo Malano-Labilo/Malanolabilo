@@ -47,7 +47,8 @@ class ProfileUpdateRequest extends FormRequest
     {
         /** @var \Illuminate\Http\Request $this */
         $avatarData = json_decode($this->input('avatar'), true); // decode jadi array
-        $path = $avatarData['path'];
+        // $path = $avatarData['path'];
+        $path = $this->input('avatar');
         // Pastikan path tidak null dan file ada di storage
         if ($path && Storage::disk('public')->exists($path)) {
             Storage::disk('public')->delete($path);

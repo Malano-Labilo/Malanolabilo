@@ -25,10 +25,13 @@ const csrfToken = document
 
 //Filepond untuk input Avatar yang ada di form edit Profile
 document.addEventListener("DOMContentLoaded", () => {
-    const inputAvatar = document.querySelector("#avatar");
+    const inputAvatar = document.querySelector("#avatar"),
+        submitBtn = document.querySelector("#submit-button"),
+        form = document.querySelector("#profile-form");
+
     if (!inputAvatar) return;
 
-    FilePond.create(inputAvatar, {
+    const pond = FilePond.create(inputAvatar, {
         allowMultiple: false,
         acceptedFileTypes: [
             "image/png",
@@ -37,6 +40,19 @@ document.addEventListener("DOMContentLoaded", () => {
             "image/webp",
         ],
         maxFileSize: "20MB",
+
+        onprocessfilestart: () => {
+            submitBtn.disabled = true; //Matikan tombol saat upload mulai
+        },
+        onprocessfile: () => {
+            submitBtn.disabled = false; //Aktifkan tombol saat upload selesai
+        },
+        onprocessfileabort: () => {
+            submitBtn.disabled = false; //Aktifkan tombol jika upload dibatalkan
+        },
+        onprocessfilerror: () => {
+            submitBtn.disabled = false; //Aktifkan tombol jika upload gagal
+        },
         server: {
             process: {
                 url: "upload-avatar",
@@ -86,6 +102,21 @@ document.addEventListener("DOMContentLoaded", () => {
                     });
             },
         },
+    });
+
+    // Cegah submit kalau ada file yang masih diupload
+    form.addEventListener("submit", (e) => {
+        const stillProcessing = pond
+            .getFiles()
+            .some(
+                (file) =>
+                    file.status !== FilePond.FileStatus.PROCESSING_COMPLETE &&
+                    file.status !== FilePond.FileStatus.IDLE
+            );
+        if (stillProcessing) {
+            e.preventDefault();
+            alert("Harap Tunggu Sampai Upload Selesai!");
+        }
     });
 });
 

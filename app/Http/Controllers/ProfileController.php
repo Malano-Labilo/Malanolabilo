@@ -34,16 +34,17 @@ class ProfileController extends Controller
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $validatedData = $request->validated(); // Validasi data yang diterima dari request
-
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
         }
-
+        $user = $request->user();
+        //ambil data avatar lama
+        $oldAvatar = $user->avatar;
         if ($request->avatar) {
-            // Pengecekan apkah stringnya Valid JSON
-            $avatarData = json_decode($request->avatar, true); // decode jadi array
-            if (isset($avatarData['path'])) {
-                $path = $avatarData['path'];
+            // Pengecekan apkah stringnya Valid 
+            $avatarData = $request->avatar; // decode jadi array
+            if (isset($avatarData)) {
+                $path = $avatarData;
                 if (!empty($request->user()->avatar)) {
                     Storage::disk('public')->delete($request->user()->avatar);
                 }
@@ -51,6 +52,9 @@ class ProfileController extends Controller
                 Storage::disk('public')->move($path, "img/avatar/" . $newFileName);
                 $validatedData['avatar'] = "img/avatar/" . $newFileName;
             }
+        } else {
+            // Kalau kosong, biarkan avatar lama
+            $validatedData['avatar'] = $oldAvatar;
         }
 
         $request->user()->update($validatedData);
