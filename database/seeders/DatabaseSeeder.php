@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             CategorySeeder::class,
-            WorkSeeder::class,
+            // WorkSeeder::class,
         ]);
     }
 }

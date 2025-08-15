@@ -129,7 +129,7 @@
             </svg>
             Add New Project
         </button>
-        <a href="{{ route('dashboard') }}" id="createProductModalButton" data-modal-target="createProductModal"
+        <a href="{{ route('dashboard') }}" id="cencelProductModalButton" data-modal-target="createProductModal"
             data-modal-toggle="createProductModal"
             class="flex items-center justify-center cursor-pointer bg-red-blue text-white-first bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 focus:outline-none ">
             Cancel

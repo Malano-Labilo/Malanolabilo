@@ -41,6 +41,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/dashboard', [DashboardWorkController::class, 'store'])->name('dashboard.store');
     Route::post('/dashboard/upload-thumbnail', [DashboardWorkController::class, 'uploadThumbnail'])->name('dashboard.store.upload-thumbnail');
     Route::get('/dashboard/create', [DashboardWorkController::class, 'create'])->name('dashboard.work.create');
+    Route::delete('/dashboard/delete-thumbnail', [DashboardWorkController::class, 'deleteThumbnail'])->name('dashboard.work.delete');
     Route::delete('/dashboard/{work:slug}', [DashboardWorkController::class, 'destroy'])->name('dashboard.work.destroy');
     Route::get('/dashboard/{work:slug}/edit', [DashboardWorkController::class, 'edit'])->name('dashboard.work.edit');
     Route::patch('/dashboard/{work:slug}', [DashboardWorkController::class, 'update'])->name('dashboard.work.update');

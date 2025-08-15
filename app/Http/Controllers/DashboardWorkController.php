@@ -6,6 +6,7 @@ use App\Models\Work;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -63,17 +64,15 @@ class DashboardWorkController extends Controller
             'description' => 'Deskripsi',
         ]);
 
-
         if ($request->thumbnail) {
             // Pengecekan apkah stringnya Valid JSON
-            $thumbnailData = json_decode($request->thumbnail, true); // decode jadi array
-            if (json_last_error() === JSON_ERROR_NONE && isset($thumbnailData['path'])) {
-                $path = $thumbnailData['path'];
+            $thumbnailData = $request->thumbnail;
+            if (json_last_error() === JSON_ERROR_NONE && isset($thumbnailData)) {
                 if (!empty($request->user()->thumbnail)) {
                     Storage::disk('public')->delete($request->user()->thumbnail);
                 }
-                $newFileName = Str::after($path, 'tmp/thumbnail/');
-                Storage::disk('public')->move($path, "img/thumbnail/" . $newFileName);
+                $newFileName = Str::after($thumbnailData, 'tmp/thumbnail/');
+                Storage::disk('public')->move($thumbnailData, "img/thumbnail/" . $newFileName);
                 $data['thumbnail'] = "img/thumbnail/" . $newFileName;
             }
         }
@@ -84,7 +83,6 @@ class DashboardWorkController extends Controller
             'slug' =>  Str::slug($request->input('title')), // Mengambil data dari inputan form dengan name="title" dan mengubahnya menjadi slug
             'user_id' => Auth::user()->id, // Mengambil ID user yang sedang login
             'category_id' => $request->input('category'), // Mengambil data dari inputan form dengan name="category"
-
             'thumbnail' => $data['thumbnail'], // Mengambil file dari inputan form dengan name="thumbnail" dan menyimpannya di folder 'thumbnails' pada disk 'public'
             'excerpt' => $request->input('excerpt'), // Mengambil data dari inputan form dengan name="excerpt"
             'link' => $request->input('link'), // Mengambil data dari inputan form dengan name="link"
@@ -92,13 +90,35 @@ class DashboardWorkController extends Controller
             'description' => $request->input('description'), // Mengambil data dari inputan form dengan name="description"
             'published_at' => now(), // Mengambil waktu saat ini
         ]);
-
-
         $request->user()->update($data);
 
         return redirect()->route('dashboard')->with(['success' => 'Project created successfully!']);
     }
 
+
+    public function deleteThumbnail(Request $request): JsonResponse
+    {
+        // FilePond akan mengirim nama/path file yang diupload
+        // Laravel auto-parse JSON karena header Content-Type: application/json
+        $path = $request->input('path');
+
+        if (!$path) {
+            return response()->json(['error' => 'No file specified'], 400);
+        }
+
+        //Demi keamanan, batasi hanya path di tmp/thumbnail
+        if (!Str::startsWith($path, 'tmp/thumbnail')) {
+            return response()->json(['error' => 'Invalid path'], 422);
+        }
+
+        // Pastikan file ada di disk public
+        if (Storage::disk('public')->exists($path)) {
+            Storage::disk('public')->delete($path);
+            return response()->json(['status' => 'success', 'message' => 'File deleted']);
+        }
+
+        return response()->json(['error' => 'File not found'], 404);
+    }
 
     public function show(Work $work)
     {
