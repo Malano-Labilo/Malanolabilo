@@ -69,3 +69,5 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 3. Jika proses upload masih berlangsung, user tidak bisa mengklik button save/submit (halaman akan memunculkan alert)
 4. Setiap 1 Jam file di tmp akan terhapus sehingga tidak akan menumpuk di folder tmp
 5. Jika avatar tidak diisi maka yang menjadi avatar adalah tetap avatar lama
+6. Jika proses upload masih jalan user tidak akan bisa mengklik button cancel
+7. Jika keluar halaman form maka file yang diupload di filepond yang ada di /tmp akan dihapus

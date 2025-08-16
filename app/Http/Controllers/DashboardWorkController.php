@@ -120,6 +120,29 @@ class DashboardWorkController extends Controller
         return response()->json(['error' => 'File not found'], 404);
     }
 
+    public function deleteTempThumbnails(Request $request): JsonResponse
+    {
+        // Bisa datang sebagai JSON (opsi A) atau form-encoded (opsi B)
+        $files = $request->input('files', []); // ['tmp/thumbnail/abc.jpg', ...]
+
+        if (!is_array($files)) {
+            return response()->json(['error' => 'Invalid payload'], 422);
+        }
+
+        foreach ($files as $path) {
+            if (!is_string($path)) continue;
+
+            // Demi keamanan: batasi hanya folder tmp/thumbnail
+            if (!Str::startsWith($path, 'tmp/thumbnail')) continue;
+
+            if (Storage::disk('public')->exists($path)) {
+                Storage::disk('public')->delete($path);
+            }
+        }
+
+        return response()->json(['ok' => true]);
+    }
+
     public function show(Work $work)
     {
         return view('dashboard.show', [

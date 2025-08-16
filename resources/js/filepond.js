@@ -276,43 +276,36 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    if (cancelBtn) {
-        cancelBtn.addEventListener("click", async () => {
-            //1. Ambil path dari input hidden
-            const thumbnailPath = hiddenPathInput?.value?.trim();
-            //2. Nonaktifkan tombol supaya tidak double-click
-            cancelBtn.disabled = true;
-            //3. Kalau ada path, minta server hapus
-            if (thumbnailPath) {
-                try {
-                    const res = await fetch("/dashboard/delete-thumbnail", {
-                        method: "DELETE",
-                        headers: {
-                            "X-CSRF-TOKEN": csrfToken, //Penting untuk veriﬁkasi CSRF
-                            "Content-Type": "application/json", // supaya Laravel parse JSON
-                            Accept: "application/json", // pastikan respons JSON (bukan redirect HTML)
-                        },
-                        //Kirim path ke server
-                        body: JSON.stringify({ path: thumbnailPath }),
-                        credentials: "same-origin", // pastikan cookie session ikut (opsional, tapi bagus eksplisit)
-                    });
-                    // 3a) Skenario umum: 200 OK → file dihapus
-                    // 3b) 404 (file sudah tidak ada) → tetap lanjut redirect
-                    // 3c) 419/401 (token/session) → tetap lanjut redirect (kita tidak mau user “terkunci” di halaman)
-                } catch (e) {
-                    //Jaringan error, abaikan; kita tetap keluar halaman
-                    console.error("Error di Cancel Delete", e);
-                } finally {
-                    // 4) Apapun hasilnya, bersihkan state lokal & redirect
-                    hiddenPathInput.value = ""; //agar tidak ada sisa value
-                    window.location.href = "/dashboard"; //Tujuan keluar halaman
-                }
-            } else {
-                //Tidak ada file tmp -> langsung keluar
-                window.location.href = "/dashboard";
-            }
+    //helper cleanup
+    function sendTempCleanup() {
+        //Ambil daftar file yang sudah pernah di-upload ke server (punya serverId)
+        const files = pond
+            .getFiles()
+            .map((f) => f.serverId)
+            .filter(Boolean); // buang null/undefined
+
+        if (files.length === 0) return;
+
+        // (Tanpa exempt CSRF): sertakan _token di body form-encoded
+        const csrf = csrfToken;
+        const body = new URLSearchParams();
+        body.set("_token", csrf);
+        files.forEach((p) => body.append("files[]", p));
+        const blob = new Blob([body.toString()], {
+            type: "application/x-www-form-urlencoded;charset=UTF-8",
         });
+        navigator.sendBeacon("/dashboard/delete-temp-thumbnail", blob);
     }
+    // Pakai event yang paling reliable
+    window.addEventListener("pagehide", sendTempCleanup);
+
+    // Backup untuk browser tertentu (mis. iOS Safari)
+    document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "hidden") sendTempCleanup();
+    });
+
+    // (Opsional) cadangan terakhir
+    window.addEventListener("beforeunload", sendTempCleanup);
 });
 
 //Filepond untuk input Thumbnail yang ada di form Edit Work
