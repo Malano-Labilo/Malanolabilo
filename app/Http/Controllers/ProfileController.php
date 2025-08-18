@@ -87,6 +87,24 @@ class ProfileController extends Controller
         return response()->json(['error' => 'File not found'], 404);
     }
 
+    public function deleteTempAvatars(Request $request): JsonResponse
+    {
+        // Bisa datang sebagai JSON (opsi A) atau form-encoded (opsi B)
+        $files = $request->input('files', []); // ['tmp/avatar/abc.jpg', ...]
+        if (!is_array($files)) {
+            return response()->json(['error' => 'Invalid payload'], 422);
+        }
+        foreach ($files as $path) {
+            if (!is_string($path)) continue;
+            // Demi keamanan: batasi hanya folder tmp/avatar
+            if (!Str::startsWith($path, 'tmp/avatar')) continue;
+            if (Storage::disk('public')->exists($path)) {
+                Storage::disk('public')->delete($path);
+            }
+        }
+        return response()->json(['ok' => true]);
+    }
+
     public function destroy(Request $request): RedirectResponse
     {
         $request->validateWithBag('userDeletion', [

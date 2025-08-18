@@ -23,7 +23,7 @@ const csrfToken = document
     .querySelector('meta[name="csrf-token"]')
     .getAttribute("content");
 
-//Filepond untuk input Avatar yang ada di form edit Profile
+//FILEPOND untuk input Avatar yang ada di form edit Profile
 document.addEventListener("DOMContentLoaded", () => {
     const inputAvatar = document.querySelector("#avatar"),
         submitBtn = document.querySelector("#submit-button"),
@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
         onprocessfileabort: () => {
             submitBtn.disabled = false; //Aktifkan tombol jika upload dibatalkan
         },
-        onprocessfilerror: () => {
+        onprocessfileerror: () => {
             submitBtn.disabled = false; //Aktifkan tombol jika upload gagal
         },
         server: {
@@ -79,7 +79,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 },
             },
-
             revert: (uniqueFileId, load, error) => {
                 fetch("/delete-avatar", {
                     method: "DELETE",
@@ -104,7 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
         },
     });
 
-    // Cegah submit kalau Proses upload thumbnail belum selesai
+    // Cegah submit kalau Proses upload Avatar belum selesai
     form.addEventListener("submit", (e) => {
         const stillProcessing = pond
             .getFiles()
@@ -118,9 +117,41 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Harap Tunggu Sampai Upload Selesai!");
         }
     });
+
+    //Helper CleanUp
+    function sendTempCleanup() {
+        //Ambil daftar file yang sudah pernah di-upload ke server (punya serverId)
+        const files = pond
+            .getFiles()
+            .map((f) => f.serverId)
+            .filter(Boolean); // buang null/undefined
+
+        if (files.length === 0) return;
+
+        //(Tanpa exempt CSRF): sertakan _token di body form-encoded
+        const csrf = csrfToken;
+        const body = new URLSearchParams();
+        body.set("_token", csrf);
+        files.forEach((p) => body.append("files[]", p));
+        const blob = new Blob([body.toString()], {
+            type: "application/x-www-form-urlencoded;charset=UTF-8",
+        });
+        navigator.sendBeacon("/delete-temp-avatar", blob);
+    }
+
+    // Pakai event yang paling reliable
+    window.addEventListener("pagehide", sendTempCleanup);
+
+    // Backup untuk browser tertentu (mis. iOS Safari)
+    document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "hidden") sendTempCleanup();
+    });
+
+    // (Opsional) cadangan terakhir
+    window.addEventListener("beforeunload", sendTempCleanup);
 });
 
-//Filepond untuk input Thumbnail yang ada di form Create Work
+//FILEPOND untuk input Thumbnail yang ada di form Create Work
 document.addEventListener("DOMContentLoaded", () => {
     const inputThumbnail = document.querySelector("#thumbnail-create"),
         submitBtn = document.querySelector("#createProductModalButton"),
@@ -196,7 +227,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     cancelBtn.addEventListener("click", async (e) => {
         e.preventDefault(); // 🔹 blok navigasi bawaan <a>
-
         const stillProcessing = pond
             .getFiles()
             .some(
@@ -236,31 +266,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // 🔹 Fungsi untuk cek status upload
-    function updateButtonState() {
-        const stillProcessing = pond
-            .getFiles()
-            .some(
-                (file) =>
-                    file.status !== FilePond.FileStatus.PROCESSING_COMPLETE &&
-                    file.status !== FilePond.FileStatus.IDLE
-            );
-
-        submitBtn.disabled = stillProcessing;
-        cancelBtn.disabled = stillProcessing;
-    }
-
-    // 🔹 Pantau semua perubahan status file
-    [
-        "addfile",
-        "processfilestart",
-        "processfileprogress",
-        "processfile",
-        "processfileabort",
-        "processfileerror",
-        "removefile",
-    ].forEach((evt) => pond.on(evt, updateButtonState));
-
     // Cegah submit kalau ada file yang masih diupload
     form.addEventListener("submit", (e) => {
         const stillProcessing = pond
@@ -276,7 +281,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    //helper cleanup
+    //Helper Cleanup
     function sendTempCleanup() {
         //Ambil daftar file yang sudah pernah di-upload ke server (punya serverId)
         const files = pond
@@ -308,7 +313,7 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener("beforeunload", sendTempCleanup);
 });
 
-//Filepond untuk input Thumbnail yang ada di form Edit Work
+//FILEPOND untuk input Thumbnail yang ada di form Edit Work
 document.addEventListener("DOMContentLoaded", () => {
     const inputThumbnail = document.querySelector("#thumbnail");
     if (!inputThumbnail) return;
