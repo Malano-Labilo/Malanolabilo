@@ -26,7 +26,7 @@ const csrfToken = document
 //FILEPOND untuk input Avatar yang ada di form edit Profile
 document.addEventListener("DOMContentLoaded", () => {
     const inputAvatar = document.querySelector("#avatar"),
-        submitBtn = document.querySelector("#submit-button"),
+        submitBtn = document.querySelector("#button-submit"),
         form = document.querySelector("#profile-form");
 
     if (!inputAvatar) return;
@@ -65,6 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     try {
                         const res = JSON.parse(response);
                         document.querySelector("#avatar-path").value = res.path;
+
                         return res.path; // kirim kembali path agar bisa dibaca saat submit form
                     } catch (error) {
                         console.error(
@@ -80,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 },
             },
             revert: (uniqueFileId, load, error) => {
-                fetch("/delete-avatar", {
+                fetch("/profile/delete-avatar", {
                     method: "DELETE",
                     headers: {
                         "X-CSRF-TOKEN": csrfToken,
@@ -225,6 +226,7 @@ document.addEventListener("DOMContentLoaded", () => {
         },
     });
 
+    // Cegah submit kalau ada file yang masih diupload
     cancelBtn.addEventListener("click", async (e) => {
         e.preventDefault(); // 🔹 blok navigasi bawaan <a>
         const stillProcessing = pond
@@ -315,10 +317,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
 //FILEPOND untuk input Thumbnail yang ada di form Edit Work
 document.addEventListener("DOMContentLoaded", () => {
-    const inputThumbnail = document.querySelector("#thumbnail");
+    const inputThumbnail = document.querySelector("#thumbnail"),
+        hiddenPathInput = document.querySelector("#thumbnail-path"),
+        cancelBtn = document.getElementById("createProductModalButton"),
+        submitBtn = document.querySelector("#button-submit"),
+        form = document.querySelector("#post-edit-form");
+
     if (!inputThumbnail) return;
 
-    FilePond.create(inputThumbnail, {
+    const pond = FilePond.create(inputThumbnail, {
         allowMultiple: false,
         acceptedFileTypes: [
             "image/png",
@@ -328,25 +335,142 @@ document.addEventListener("DOMContentLoaded", () => {
         ],
         maxFileSize: "20MB",
         server: {
-            url: "upload-thumbnail",
-            method: "POST",
-            headers: {
-                "X-CSRF-TOKEN": csrfToken,
+            process: {
+                url: "upload-thumbnail",
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": csrfToken,
+                },
+
+                onload: (response) => {
+                    try {
+                        const res = JSON.parse(response);
+                        document.querySelector("#thumbnail-path").value =
+                            res.path;
+                        return res.path; // kirim kembali path agar bisa dibaca saat submit form
+                    } catch (error) {
+                        console.error(
+                            "Invalid JSON response from Server",
+                            response
+                        );
+                        console.error(
+                            "Invalid JSON response dari Server",
+                            response
+                        );
+                        return null;
+                    }
+                },
+                onerror: (response) => {
+                    console.error("Upload error:", response);
+                },
+            },
+            revert: (uniqueFieldId, load, error) => {
+                fetch("/dashboard/delete-thumbnail", {
+                    method: "DELETE",
+                    headers: {
+                        "X-CSRF-TOKEN": csrfToken,
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ id: uniqueFieldId }),
+                })
+                    .then((res) => {
+                        if (!res.ok) throw new Error("Failed to delete");
+                        return res.json();
+                    })
+                    .then(() => {
+                        load(); // Kasih tahu FilePond kalau sukses
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                        error("Error Deleting File");
+                    });
             },
         },
-        onload: (response) => {
-            try {
-                const res = JSON.parse(response);
-                document.querySelector("#thumbnail-path").value = res.path;
-                return res.path; // kirim kembali path agar bisa dibaca saat submit form
-            } catch (error) {
-                console.error("Invalid JSON response from Server", response);
-                console.error("Invalid JSON response dari Server", response);
-                return null;
-            }
-        },
-        onerror: (response) => {
-            console.error("Upload error:", response);
-        },
     });
+
+    // Cegah submit kalau ada file yang masih diupload
+    cancelBtn.addEventListener("click", async (e) => {
+        e.preventDefault(); // 🔹 blok navigasi bawaan <a>
+        const stillProcessing = pond
+            .getFiles()
+            .some(
+                (file) =>
+                    file.status !== FilePond.FileStatus.PROCESSING_COMPLETE &&
+                    file.status !== FilePond.FileStatus.IDLE
+            );
+
+        if (stillProcessing) {
+            alert("Harap tunggu sampai upload selesai!");
+            return; // 🔹 stop di sini, jangan lanjut redirect
+        }
+        const thumbnailPath = hiddenPathInput?.value?.trim();
+        cancelBtn.disabled = true;
+
+        if (thumbnailPath) {
+            try {
+                await fetch("/dashboard/delete-thumbnail", {
+                    method: "DELETE",
+                    headers: {
+                        "X-CSRF-TOKEN": csrfToken,
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ path: thumbnailPath }),
+                    credentials: "same-origin",
+                });
+            } catch (error) {
+                console.error("Error deleting thumbnail:", error);
+            } finally {
+                hiddenPathInput.value = "";
+                window.location.href = "/dashboard"; // pindah halaman
+            }
+        } else {
+            window.location.href = "/dashboard"; // pindah halaman
+        }
+    });
+
+    // Cegah submit kalau ada file yang masih diupload
+    form.addEventListener("submit", (e) => {
+        const stillProcessing = pond
+            .getFiles()
+            .some(
+                (file) =>
+                    file.status !== FilePond.FileStatus.PROCESSING_COMPLETE &&
+                    file.status !== FilePond.FileStatus.IDLE
+            );
+        if (stillProcessing) {
+            e.preventDefault();
+            alert("Harap Tunggu Sampai Upload Selesai!");
+        }
+    });
+
+    //Helper Cleanup
+    function sendTempCleanup() {
+        //Ambil daftar file yang sudah pernah di-upload ke server (punya serverId)
+        const files = pond
+            .getFiles()
+            .map((f) => f.serverId)
+            .filter(Boolean); // buang null/undefined
+
+        if (files.length === 0) return;
+
+        // (Tanpa exempt CSRF): sertakan _token di body form-encoded
+        const csrf = csrfToken;
+        const body = new URLSearchParams();
+        body.set("_token", csrf);
+        files.forEach((p) => body.append("files[]", p));
+        const blob = new Blob([body.toString()], {
+            type: "application/x-www-form-urlencoded;charset=UTF-8",
+        });
+        navigator.sendBeacon("/dashboard/delete-temp-thumbnail", blob);
+    }
+
+    // Pakai event yang paling reliable
+    window.addEventListener("pagehide", sendTempCleanup);
+
+    // Backup untuk browser tertentu (mis. iOS Safari)
+    document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "hidden") sendTempCleanup();
+    });
+    // (Opsional) cadangan terakhir
+    window.addEventListener("beforeunload", sendTempCleanup);
 });
