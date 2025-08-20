@@ -371,7 +371,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         "X-CSRF-TOKEN": csrfToken,
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({ id: uniqueFieldId }),
+                    body: JSON.stringify({ path: uniqueFieldId }),
                 })
                     .then((res) => {
                         if (!res.ok) throw new Error("Failed to delete");

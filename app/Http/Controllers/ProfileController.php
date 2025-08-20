@@ -40,6 +40,7 @@ class ProfileController extends Controller
         $user = $request->user();
         //ambil data avatar lama
         $oldAvatar = $user->avatar;
+
         if ($request->avatar) {
             // Pengecekan apkah stringnya Valid 
             $avatarData = $request->avatar; // decode jadi array

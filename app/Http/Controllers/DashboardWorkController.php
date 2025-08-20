@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Work;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -193,58 +194,32 @@ class DashboardWorkController extends Controller
             'has_page' => 'Halaman',
             'description' => 'Deskripsi',
         ]);
-
-        // // Cek apakah request mengandung path thumbnail baru (hasil dari FilePond)
-        // if ($request->filled('thumbnail') && $request->thumbnail !== $work->thumbnail) {
-
         $oldThumbnail = $work->thumbnail; //ambil data dari database
 
         if ($request->thumbnail) {
             //Pengecekan Apakah stringnya Valid JSON
             $thumbnailData = $request->thumbnail; //ambil data dari request
+            //Pastikan file ada di disk public
             if (json_last_error() === JSON_ERROR_NONE && isset($thumbnailData)) {
-                $thumbnailData;
-                if (!empty($oldThumbnail)) {
+                //normalisasi path agar sesuai dengan disk Laravel
+                $thumbnailData = $request->thumbnail;
+                // Hapus thumbnail lama jika ada, hapus dari storage
+                if (!empty($oldThumbnail) && Storage::disk('public')->exists($oldThumbnail)) {
                     Storage::disk('public')->delete($oldThumbnail);
                 }
-                $newFileName = Str::after($thumbnailData, 'tmp/thumbnail/');
-                Storage::disk('public')->move($thumbnailData, "img/thumbnail/" . $newFileName);
-                $data['thumbnail'] = "img/thumbnail/" . $newFileName;
+                // Tentukan nama file baru
+                $newFileName = basename($thumbnailData);
+                $newPath = "img/thumbnail/" . $newFileName; // Path baru untuk thumbnail
+                Storage::disk('public')->move($thumbnailData, $newPath);
+                $data['thumbnail'] = $newPath;
             }
         } else { //Kalau kosong, biarkan thumbnail lama
             $data['thumbnail'] = $oldThumbnail;
         }
 
-        // if (is_string($thumbnailData) && Str::startsWith($thumbnailData, 'tmp/thumbnail')) {
-        //     // Langsung pakai kalau sudah path string
-        //     $thumbnailPath = $thumbnailData;
-        // } elseif (is_string($thumbnailData) && Str::contains($thumbnailData, '{')) {
-        //     // Kalau isinya JSON, ambil path dari JSON
-        //     $decoded = json_decode($thumbnailData, true);
-        //     $thumbnailPath = $decoded['path'] ?? '';
-        //     dd($thumbnailPath);
-        // }
-
-        // Validasi bahwa path berasal dari direktori tmp/thumbnail
-        // if ($thumbnailPath && Str::startsWith($thumbnailPath, 'tmp/thumbnail')) {
-        //     $fileName = Str::after($thumbnailPath, 'tmp/thumbnail/');
-        //     Storage::disk('public')->move($thumbnailPath, 'img/thumbnail/' . $fileName);
-        //     $data['thumbnail'] = 'img/thumbnail/' . $fileName;
-
-        //     // Hapus thumbnail lama jika ada
-        //     if ($oldThumbnail && Storage::disk('public')->exists($oldThumbnail)) {
-        //         Storage::disk('public')->delete($oldThumbnail);
-        //     }
-        // }
-        // }
-
         $data['slug'] = Str::slug($data['title']);
         $data['user_id'] = Auth::id();
         $data['published_at'] = now();
-
-        // if (!isset($data['thumbnail']) || empty($data['thumbnail'])) {
-        //     $data['thumbnail'] = $work->thumbnail; // Jika tidak ada thumbnail baru, gunakan thumbnail lama
-        // }
 
         // Update
         $updated = $work->update($data);
