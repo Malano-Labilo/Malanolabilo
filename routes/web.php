@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\DashboardWorkController;
+use App\Http\Controllers\LinkLanoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WorkController;
 use App\Http\Controllers\ProfileController;
@@ -22,16 +23,16 @@ Route::get('/', function () {
 // })->name('about');
 
 Route::get('/works', [WorkController::class, 'index'])->name('works');
-
 Route::get('/all-works', [WorkController::class, 'works'])->name('works.all');
 Route::get('/works/{work:slug}', [WorkController::class, 'work'])->name('works.work');
-
 //Halaman Contact
 // Route::get('/contact', function(){
 //     return view('pages.contact',[
 //         'title' => 'Contact',
 //     ]);
 // })->name('contact');
+Route::get('/linklano', [LinkLanoController::class, 'index'])->name('linklano');
+
 
 Route::get(env('SECRET_LOGIN_PATH', 'login-dimension-admin'), [AuthenticatedSessionController::class, 'create'])->middleware(['guest', 'secret.login.access'])->name('login');
 Route::post(env('SECRET_LOGIN_PATH', 'login-dimension-admin'), [AuthenticatedSessionController::class, 'store'])->middleware('guest')->name('login.store');
