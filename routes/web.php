@@ -31,7 +31,7 @@ Route::get('/works/{work:slug}', [WorkController::class, 'work'])->name('works.w
 //         'title' => 'Contact',
 //     ]);
 // })->name('contact');
-Route::get('/linklano', [LinkLanoController::class, 'index'])->name('linklano');
+Route::get('/link', [LinkLanoController::class, 'index'])->name('linklano');
 
 
 Route::get(env('SECRET_LOGIN_PATH', 'login-dimension-admin'), [AuthenticatedSessionController::class, 'create'])->middleware(['guest', 'secret.login.access'])->name('login');

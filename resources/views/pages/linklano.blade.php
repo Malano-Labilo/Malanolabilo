@@ -33,9 +33,12 @@
                 <img src="img/avatar-linklano.png" alt="Tidak Ada Foto"
                     class="w-[104px] h-[104px] my-[16px] rounded-full object-center object-cover">
                 <div class="flex w-full max-w-[364px] justify-evenly [&>*]:w-[24px] lg:[&>*]:w-[32px]">
-                    <a href="https://www.instagram.com/malano_labilo/"><x-elements-icon name="instagram-brands" /></a>
-                    <a href="https://www.behance.net/malanolabilo"><x-elements-icon name="behance-brands" /></a>
-                    <a href="https://dribbble.com/Malano-labilo"><x-elements-icon name="dribbble-brands" /></a>
+                    <a href="https://www.instagram.com/malano_labilo/" target="_blank"
+                        rel="noopener noreferrer"><x-elements-icon name="instagram-brands" /></a>
+                    <a href="https://www.behance.net/malanolabilo" target="_blank"
+                        rel="noopener noreferrer"><x-elements-icon name="behance-brands" /></a>
+                    <a href="https://dribbble.com/Malano-labilo" target="_blank"
+                        rel="noopener noreferrer"><x-elements-icon name="dribbble-brands" /></a>
                 </div>
             </div>
         </div>
@@ -43,19 +46,19 @@
     <section id="linklanoContents" class="w-full flex justify-center font-spaceGrotesk">
         <div
             class="container py-[40px] flex flex-col gap-[24px] items-center [&>*]:w-[448px] [&>*]:h-[78px] [&>*]:border-[2px] [&>*]:rounded-[8px] [&>*]:border-dark-first [&>*]:flex [&>*]:justify-center [&>*]:items-center [&>*]:font-[500] [&>*]:text-[18px] [&>*]:cursor-pointer [&>*]:shadow-dark-first [&>*]:transition-shadow [&>*]:duration-600 [&>*]:active:duration-300 [&>*]:ease-in-out [&>*]:shadow-[4px_4px_0px_0px] [&>*]:hover:shadow-[8px_8px_0px_0px] [&>*]:active:shadow-[6px_6px_0px_0px] [&>*]:hover:translate-x-[-2px] [&>*]:active:translate-x-[0px] [&>*]:hover:translate-y-[-2px] [&>*]:active:translate-y-[0px]">
-            <div class="">
+            <a class="" href="#" target="_blank" rel="noopener noreferrer">
                 <p>MALANOLABILO.COM</p>
-            </div>
-            <div class="flex-col">
+            </a>
+            <a class="flex-col" href="#" target="_blank" rel="noopener noreferrer">
                 <p class="text-[10px] font-aleo">coming soon coming soon coming soon coming soon coming soon coming soon
                 </p>
                 <p>PREPARED FOR DOOMSDAY</p>
-            </div>
-            <div class="flex-col">
+            </a>
+            <a class="flex-col" href="#" target="_blank" rel="noopener noreferrer">
                 <p class="text-[10px] font-aleo">coming soon coming soon coming soon coming soon coming soon coming soon
                 </p>
                 <p>MORPHONEME</p>
-            </div>
+            </a>
         </div>
     </section>
 
