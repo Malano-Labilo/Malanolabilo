@@ -5,12 +5,12 @@
         </div>
         <div
             class=" w-full max-w-[992px] flex justify-evenly [&>*]:w-[40px] lg:[&>*]:w-[48px] [&>*]:cursor-pointer [&>*]:transition-all [&>*]:hover:scale-110">
-            <x-elements-icon name="behance-brands" />
-            <x-elements-icon name="dribbble-brands" />
-            <x-elements-icon name="envelope-solid" />
-            <x-elements-icon name="instagram-brands" />
-            <x-elements-icon name="linkedin-brands" />
-            <x-elements-icon name="whatsapp-brands" />
+            <a href="https://www.behance.net/malanolabilo"><x-elements-icon name="behance-brands" /></a>
+            <a href="https://dribbble.com/Malano-labilo"><x-elements-icon name="dribbble-brands" /></a>
+            {{-- <a href=""><x-elements-icon name="envelope-solid" /></a> --}}
+            <a href="https://www.instagram.com/malano_labilo/"><x-elements-icon name="instagram-brands" /></a>
+            <a href="www.linkedin.com/in/mabilzak"><x-elements-icon name="linkedin-brands" /></a>
+            {{-- <a href=""><x-elements-icon name="whatsapp-brands" /></a> --}}
         </div>
     </div>
 </section>

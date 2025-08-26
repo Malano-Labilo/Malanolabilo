@@ -15,7 +15,7 @@
             class="contact w-full max-w-[800px] flex flex-col gap-[24px] lg:gap-0 lg:flex-row justify-between items-center not-italic [&>*]:px-[12px]">
             <p>malanolabilo@gmail.com</p>
             <p>Malang City, Indonesia</p>
-            <p>+62 823 3790 0113</p>
+            <p>Lano The Creator</p>
         </address>
         <p class="credits">&#169; 2025 Malano Labilo. All rights reserved.</p>
     </div>
