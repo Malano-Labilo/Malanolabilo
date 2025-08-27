@@ -23,7 +23,7 @@
                                         <span class="w-fit opacity-50 cursor-not-allowed">
                             @endif
                             <button type="submit"
-                                class="w-[120px] h-[40px] cursor-pointer bg-blue-first text-white-first font-spaceGrotesk font-[400] text-[16px] hover:bg-blue-plus hover:text-dark-first transition-all duration-300">See
+                                class="w-[120px] h-[40px] cursor-pointer bg-blue-second text-white-first font-spaceGrotesk font-[400] text-[16px] hover:bg-blue-plus hover:text-dark-first transition-all duration-300">See
                                 Detail</button>
                             @if ($work->has_page || $work->link)
                                 </a>
@@ -34,7 +34,7 @@
             </div>
             <a href="{{ route('works.all') }}">
                 <button type="submit"
-                    class="w-fit my-[16px] px-[12px] py-[8px] cursor-pointer bg-blue-first text-white-first font-spaceGrotesk font-[600] text-[16px] hover:bg-blue-plus hover:text-dark-first transition-all duration-300">See
+                    class="w-fit my-[16px] px-[12px] py-[8px] cursor-pointer bg-blue-second text-white-first font-spaceGrotesk font-[600] text-[16px] hover:bg-blue-plus hover:text-dark-first transition-all duration-300">See
                     More</button></a>
         </div>
     </div>

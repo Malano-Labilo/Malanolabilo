@@ -1,12 +1,13 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\DashboardWorkController;
-use App\Http\Controllers\LinkLanoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WorkController;
+use App\Http\Controllers\MediaController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\LinkLanoController;
 use Illuminate\Auth\Middleware\Authenticate;
+use App\Http\Controllers\DashboardWorkController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 //Halaman Home
 Route::get('/', function () {
@@ -25,6 +26,7 @@ Route::get('/', function () {
 Route::get('/works', [WorkController::class, 'index'])->name('works');
 Route::get('/all-works', [WorkController::class, 'works'])->name('works.all');
 Route::get('/works/{work:slug}', [WorkController::class, 'work'])->name('works.work');
+Route::get('/media', [MediaController::class, 'index'])->name('media');
 //Halaman Contact
 // Route::get('/contact', function(){
 //     return view('pages.contact',[
