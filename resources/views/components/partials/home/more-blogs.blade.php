@@ -22,9 +22,9 @@
             </div>
         </div>
         <div class="flex justify-center">
-            <button type="submit"
+            <a href="{{ route('media-home') }}"
                 class="w-fit my-[16px] px-[12px] py-[8px] cursor-pointer bg-blue-second text-white-first font-spaceGrotesk font-[600] text-[16px] hover:bg-blue-plus hover:text-dark-first transition-all duration-300">See
-                More</button>
+                More</a>
         </div>
     </div>
 </section>

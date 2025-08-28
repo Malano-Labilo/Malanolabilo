@@ -12,16 +12,15 @@ class MediaController extends Controller
      */
     public function index()
     {
-        //
+        return view('pages.media.index', [
+            'title' => 'Media',
+        ]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
-    }
+    public function create() {}
 
     /**
      * Store a newly created resource in storage.
@@ -31,12 +30,21 @@ class MediaController extends Controller
         //
     }
 
+    public function medias()
+    {
+        return view('pages.media.medias', [
+            'title' => "Media"
+        ]);
+    }
+
     /**
      * Display the specified resource.
      */
     public function show(Media $media)
     {
-        //
+        return view('pages.media.show', [
+            'title' => "Media"
+        ]);
     }
 
     /**

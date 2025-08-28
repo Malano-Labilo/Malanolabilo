@@ -1,5 +1,5 @@
 @extends('layouts.main')
 
 @section('content')
-    <x-partials.media.more-medias />
+    <x-partials.media.show-all-media />
 @endsection

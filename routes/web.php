@@ -23,10 +23,15 @@ Route::get('/', function () {
 //     ]);
 // })->name('about');
 
+//Halaman Works
 Route::get('/works', [WorkController::class, 'index'])->name('works');
 Route::get('/all-works', [WorkController::class, 'works'])->name('works.all');
 Route::get('/works/{work:slug}', [WorkController::class, 'work'])->name('works.work');
-Route::get('/media', [MediaController::class, 'index'])->name('media');
+
+//Halaman Media
+Route::get('/media', [MediaController::class, 'index'])->name('media-home');
+Route::get('/media/detail-works/{work:slug}', [MediaController::class, 'show'])->name('media-home.media');
+Route::get('/media/all-media', [MediaController::class, 'medias'])->name('media-home.medias');
 //Halaman Contact
 // Route::get('/contact', function(){
 //     return view('pages.contact',[
