@@ -32,8 +32,13 @@ class MediaController extends Controller
 
     public function medias()
     {
+        // $medias = Media::latest()->
+        $firstTitle = 'This Is';
+        $title = 'All Media ';
         return view('pages.media.medias', [
-            'title' => "Media"
+            'firstTitle' => $firstTitle,
+            'title' => $title,
+            // 'show' => $medias
         ]);
     }
 

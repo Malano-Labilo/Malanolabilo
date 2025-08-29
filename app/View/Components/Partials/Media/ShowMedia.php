@@ -6,17 +6,14 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class ShowAllMedia extends Component
+class ShowMedia extends Component
 {
     /**
      * Create a new component instance.
      */
-    public $firstTitle, $title, $show;
-    public function __construct($show = [], $title = "", $firstTitle = "")
+    public function __construct()
     {
-        $this->show = $show;
-        $this->title = $title;
-        $this->firstTitle = $firstTitle;
+        //
     }
 
     /**
@@ -24,6 +21,6 @@ class ShowAllMedia extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.partials.media.show-all-media');
+        return view('components.partials.media.show-media');
     }
 }

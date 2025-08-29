@@ -30,7 +30,7 @@ Route::get('/works/{work:slug}', [WorkController::class, 'work'])->name('works.w
 
 //Halaman Media
 Route::get('/media', [MediaController::class, 'index'])->name('media-home');
-Route::get('/media/detail-works/{work:slug}', [MediaController::class, 'show'])->name('media-home.media');
+Route::get('/media/detail-media', [MediaController::class, 'show'])->name('media-home.media');
 Route::get('/media/all-media', [MediaController::class, 'medias'])->name('media-home.medias');
 //Halaman Contact
 // Route::get('/contact', function(){
