@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\WorkController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\ProfileController;
@@ -10,11 +11,7 @@ use App\Http\Controllers\DashboardWorkController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 //Halaman Home
-Route::get('/', function () {
-    return view('pages.home', [
-        'title' => 'Home',
-    ]);
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 //Halaman About
 // Route::get('/about', function(){
@@ -30,7 +27,7 @@ Route::get('/works/{work:slug}', [WorkController::class, 'work'])->name('works.w
 
 //Halaman Media
 Route::get('/media', [MediaController::class, 'index'])->name('media-home');
-Route::get('/media/detail-media', [MediaController::class, 'show'])->name('media-home.media');
+Route::get('/media/detail-media/{media:slug}', [MediaController::class, 'show'])->name('media-home.media');
 Route::get('/media/all-media', [MediaController::class, 'medias'])->name('media-home.medias');
 //Halaman Contact
 // Route::get('/contact', function(){

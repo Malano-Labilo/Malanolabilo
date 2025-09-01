@@ -6,7 +6,7 @@
     {{-- <x-partials.home.works /> --}}
     {{-- <x-partials.home.more-works /> --}}
     <x-partials.home.contact />
-    <x-partials.home.blogs />
-    <x-partials.home.more-blogs />
+    <x-partials.home.blogs :media="$media" />
+    <x-partials.home.more-blogs :medias="$medias" />
     {{-- <x-partials.home.form-contact /> --}}
 @endsection

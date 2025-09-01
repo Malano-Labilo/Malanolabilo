@@ -11,9 +11,10 @@ class Blogs extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct()
+    public $media;
+    public function __construct($media)
     {
-        //
+        $this->media = $media;
     }
 
     /**

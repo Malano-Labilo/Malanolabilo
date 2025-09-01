@@ -12,7 +12,10 @@ class MoreMedias extends Component
      * Create a new component instance.
      */
     public $medias;
-    public function __construct() {}
+    public function __construct($medias)
+    {
+        $this->medias = $medias;
+    }
 
     /**
      * Get the view / contents that represent the component.

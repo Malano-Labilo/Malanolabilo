@@ -12,8 +12,10 @@ class MediaController extends Controller
      */
     public function index()
     {
+        $medias = Media::latest()->get();
         return view('pages.media.index', [
             'title' => 'Media',
+            'medias' => $medias
         ]);
     }
 
@@ -48,7 +50,8 @@ class MediaController extends Controller
     public function show(Media $media)
     {
         return view('pages.media.show', [
-            'title' => "Media"
+            'title' => "Media",
+            'media' => $media
         ]);
     }
 
