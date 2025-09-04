@@ -15,10 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('title'); //Judul dari Media
             $table->string('slug')->unique(); //Alamat dari Media yang akan ditampilkan di URL
-            $table->text('excerpt')->nullable(); //Ringkasan pendek yang biasanya ditampilkan dengan thumbnail
+            $table->string('excerpt')->nullable(); //Ringkasan pendek yang biasanya ditampilkan dengan thumbnail
             $table->text('body'); // deskripsi isi lengkap dari media
             $table->string('thumbnail')->nullable(); //Thumbnail dari Media
-            $table->string('author'); //Penulis atau pembuat media
+            $table->unsignedBigInteger('author_id'); //Penulis atau pembuat media
+            $table->foreign('author_id')->references('id')->on('users');
             $table->string('category'); //Kategori dari media
             $table->string('link')->nullable(); //Link menuju media yg ada diplatform lain (Wordpress, Medium, dll)
             $table->timestamp('published_at')->nullable(); //Waktu kapan media di Upload

@@ -21,7 +21,8 @@
             </form>
             <div class="cards w-full flex gap-[16px] overflow-x-auto [&>*]:shrink-0">
                 @forelse ($medias as $m)
-                    <a href="{{ $m->link }}" class="card w-[280px] lg:w-[320px] h-[400px] flex flex-col items-end">
+                    <a href="media/detail-media/{{ $m->slug }}"
+                        class="card w-[280px] lg:w-[320px] h-[400px] flex flex-col items-end">
                         <div class="w-full h-[220px]">
                             <img src="{{ $m->thumbnail }}" alt="{{ $m->title }}"
                                 class="w-full h-full object-cover object-center">

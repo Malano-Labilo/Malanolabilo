@@ -626,20 +626,21 @@ namespace App\Models {
      * @property string|null $published_at
      * @property string|null $link
      * @property string $category
-     * @property string $author
+     * @property int $author_id
      * @property string|null $thumbnail
      * @property string $body
      * @property string|null $excerpt
      * @property string $slug
      * @property string $title
      * @property int $id
+     * @property-read \App\Models\User $author
      * @method static \Illuminate\Database\Eloquent\Builder<Media>|Media whereId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Media>|Media whereTitle($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Media>|Media whereSlug($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Media>|Media whereExcerpt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Media>|Media whereBody($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Media>|Media whereThumbnail($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<Media>|Media whereAuthor($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Media>|Media whereAuthorId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Media>|Media whereCategory($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Media>|Media whereLink($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Media>|Media wherePublishedAt($value)
@@ -944,6 +945,12 @@ namespace App\Models {
     /**
      * App\Models\MediaCategory
      *
+     * @property \Illuminate\Support\Carbon|null $updated_at
+     * @property \Illuminate\Support\Carbon|null $created_at
+     * @property int $id
+     * @method static \Illuminate\Database\Eloquent\Builder<MediaCategory>|MediaCategory whereId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<MediaCategory>|MediaCategory whereCreatedAt($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<MediaCategory>|MediaCategory whereUpdatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<MediaCategory>|MediaCategory newModelQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<MediaCategory>|MediaCategory newQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<MediaCategory>|MediaCategory query()
@@ -1255,6 +1262,8 @@ namespace App\Models {
      * @property int $id
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Work> $work
      * @property-read int|null $work_count
+     * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Media> $media
+     * @property-read int|null $media_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
      * @property-read int|null $notifications_count
      * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereId($value)

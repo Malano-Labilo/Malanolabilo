@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Media;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -49,7 +50,13 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-    public function work():HasMany{
+    public function work(): HasMany
+    {
         return $this->hasMany(Work::class);
+    }
+
+    public function media(): HasMany
+    {
+        return $this->hasMany(Media::class, 'author_id');
     }
 }
