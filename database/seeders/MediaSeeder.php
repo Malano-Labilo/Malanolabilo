@@ -20,7 +20,7 @@ class MediaSeeder extends Seeder
             'body' => 'This is a sample description for the media item.',
             'thumbnail' => 'img/default-thumbnail.jpg',
             'author_id' => 1,
-            'category' => 'Tech',
+            'category_id' => 1,
             'link' => null,
             'published_at' => now(),
         ]);
@@ -31,7 +31,7 @@ class MediaSeeder extends Seeder
             'body' => 'This is another sample description for the media item.',
             'thumbnail' => 'img/user-avatar.png',
             'author_id' => 1,
-            'category' => 'Lifestyle',
+            'category_id' => 3,
             'link' => null,
             'published_at' => now(),
         ]);
@@ -42,7 +42,7 @@ class MediaSeeder extends Seeder
             'body' => 'This is the third sample description for the media item.',
             'thumbnail' => 'img/default-landscape.jpg',
             'author_id' => 1,
-            'category' => 'Health',
+            'category_id' => 4,
             'link' => null,
             'published_at' => now(),
         ]);

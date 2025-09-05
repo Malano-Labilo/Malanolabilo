@@ -24,28 +24,26 @@
             {{-- <div class="w-full flex justify-end">
                 {{ $show->links() }}</div> --}}
             <div class="cards w-full flex flex-wrap gap-[52px] justify-evenly [&>*]:shrink-0">
-                <a href="{{ route('media-home.media') }}"
-                    class="card w-[280px] lg:w-[320px] h-[400px] flex flex-col items-end">
-                    <div class="w-full h-[220px]">
-                        <img src="img/default-thumbnail.jpg" alt="No Image"
-                            class="w-full h-full object-cover object-center">
-                    </div>
-                    <div class="w-full h-[180px] p-[12px] flex flex-col gap-[8px] bg-white-first-40">
-                        <h3 class="text-[16px] font-[500]">Lorem ipsum dolor sit.</h3>
-                        <p class="line-clamp-4">
-                            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Labore minus
-                            tenetur atque, quisquam
-                            totam aliquam iure enim, harum nisi rem debitis! Dolorum nisi porro fuga molestiae odit
-                            voluptatum alias officiis ex repellendus a dicta, eligendi harum! Similique ipsa aperiam
-                            nobis
-                            ipsum ratione, magnam optio!</p>
-                        <div class="w-fit writer cursor-pointer flex gap-[16px] items-center ">
-                            <img src="img/user-avatar.png" alt="Image of the writer"
-                                class="rounded-full w-[40px] h-[40px] object-center object-cover">
-                            <p class="writer-name line-clamp-1 font-[500]">Malano Labilo</p>
+                @forelse ($medias as $media)
+                    <a href="{{ route('media-home.media', $media->slug) }}"
+                        class="card w-[280px] lg:w-[320px] h-[400px] flex flex-col items-end">
+                        <div class="w-full h-[220px]">
+                            <img src="{{ $media->thumbnail }}" alt="{{ $media->title }}"
+                                class="w-full h-full object-cover object-center">
                         </div>
-                    </div>
-                </a>
+                        <div class="w-full h-[180px] p-[12px] flex flex-col gap-[8px] bg-white-first-40">
+                            <h3 class="text-[16px] font-[500]">{{ $media->title }}</h3>
+                            <p class="line-clamp-4">
+                                {{ $media->body }}</p>
+                            <div class="w-fit writer cursor-pointer flex gap-[16px] items-center ">
+                                <img src="img/user-avatar.png" alt="Image of the writer"
+                                    class="rounded-full w-[40px] h-[40px] object-center object-cover">
+                                <div class="writer-name line-clamp-1 font-[500]">{{ $media->author->name }}</div>
+                            </div>
+                        </div>
+                    </a>
+                @empty
+                @endforelse
 
             </div>
         </div>

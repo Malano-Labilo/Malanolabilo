@@ -19,8 +19,15 @@ class Media extends Model
         'published_at'
     ];
 
+    protected $with = ['author']; // Eager load the author relationship to avoid N+1 query problem
+
     public function author(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(MediaCategory::class);
     }
 }

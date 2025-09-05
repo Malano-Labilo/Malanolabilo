@@ -20,7 +20,8 @@ return new class extends Migration
             $table->string('thumbnail')->nullable(); //Thumbnail dari Media
             $table->unsignedBigInteger('author_id'); //Penulis atau pembuat media
             $table->foreign('author_id')->references('id')->on('users');
-            $table->string('category'); //Kategori dari media
+            $table->unsignedBigInteger('category_id'); //Kategorinya
+            $table->foreign('category_id')->references('id')->on('media_categories');
             $table->string('link')->nullable(); //Link menuju media yg ada diplatform lain (Wordpress, Medium, dll)
             $table->timestamp('published_at')->nullable(); //Waktu kapan media di Upload
 

@@ -7,9 +7,11 @@
         <div class="mt-[24px] mb-[64px] flex flex-col gap-[8px] items-center">
             <div class="flex justify-center gap-[8px]">
                 <div class="">
-                    By <a href="">{{ $media->author }}</a>
+                    By <a href="{{ route('media-home.authors', $media->author->username) }}"
+                        class="hover:underline">{{ $media->author->name }}</a>
                 </div>
-                <span> in </span><a href="">{{ $media->category }}</a>
+                <span> in </span><a href="{{ route('media-home.media', $media->category->slug) }}"
+                    class="hover:underline">{{ $media->category->name }}</a>
             </div>
             <div class="">{{ $media->created_at }}</div>
         </div>

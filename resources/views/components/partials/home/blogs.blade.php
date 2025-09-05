@@ -9,7 +9,7 @@
             <div class="w-fit writer cursor-pointer flex gap-[16px] items-center ">
                 <img src="img/user-avatar.png" alt="Image of the writer"
                     class="rounded-full w-[40px] h-[40px] object-center object-cover">
-                <div class="writer-name line-clamp-1 font-[500]">{{ $media->author }}</div>
+                <div class="writer-name line-clamp-1 font-[500]">{{ $media->author->name }}</div>
             </div>
         </a>
     </div>

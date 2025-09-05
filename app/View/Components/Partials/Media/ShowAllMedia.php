@@ -11,10 +11,10 @@ class ShowAllMedia extends Component
     /**
      * Create a new component instance.
      */
-    public $firstTitle, $title, $show;
-    public function __construct($show = [], $title = "", $firstTitle = "")
+    public $firstTitle, $title, $medias;
+    public function __construct($medias = [], $title = "", $firstTitle = "")
     {
-        $this->show = $show;
+        $this->medias = $medias;
         $this->title = $title;
         $this->firstTitle = $firstTitle;
     }

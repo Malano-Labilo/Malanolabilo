@@ -34,7 +34,7 @@
                             <div class="w-fit writer cursor-pointer flex gap-[16px] items-center ">
                                 <img src="img/user-avatar.png" alt="Image of the writer"
                                     class="rounded-full w-[40px] h-[40px] object-center object-cover">
-                                <div class="writer-name line-clamp-1 font-[500]">{{ $m->author }}</div>
+                                <div class="writer-name line-clamp-1 font-[500]">{{ $m->author->name }}</div>
                             </div>
                         </div>
                     </a>
@@ -44,10 +44,10 @@
                     </div>
                 @endforelse
             </div>
-            <a href="{{ route('media-home.medias') }}">
+            {{-- <a href="{{ route('media-home.medias') }}">
                 <button type="submit"
                     class="w-fit my-[16px] px-[12px] py-[8px] cursor-pointer bg-blue-second text-white-first font-spaceGrotesk font-[600] text-[16px] hover:bg-blue-plus hover:text-dark-first transition-all duration-300">See
-                    More</button></a>
+                    More</button></a> --}}
         </div>
     </div>
 </section>
