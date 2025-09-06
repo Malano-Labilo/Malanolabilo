@@ -26,17 +26,19 @@
             <div class="cards w-full flex flex-wrap gap-[52px] justify-evenly [&>*]:shrink-0">
                 @forelse ($medias as $media)
                     <a href="{{ route('media-home.media', $media->slug) }}"
-                        class="card w-[280px] lg:w-[320px] h-[400px] flex flex-col items-end">
+                        class="card w-[280px] lg:w-[320px] h-[400px] flex flex-col items-end border-[2px] border-dark-first hover:underline hover:scale-[1.02]">
                         <div class="w-full h-[220px]">
-                            <img src="{{ $media->thumbnail }}" alt="{{ $media->title }}"
+                            <img src=" {{ asset($media->thumbnail) }}" alt="{{ $media->title }}"
                                 class="w-full h-full object-cover object-center">
                         </div>
-                        <div class="w-full h-[180px] p-[12px] flex flex-col gap-[8px] bg-white-first-40">
+                        <div
+                            class="w-full h-[180px] p-[12px] flex flex-col gap-[8px] border-[2px] border-t-dark-first bg-white-first-40">
                             <h3 class="text-[16px] font-[500]">{{ $media->title }}</h3>
                             <p class="line-clamp-4">
                                 {{ $media->body }}</p>
                             <div class="w-fit writer cursor-pointer flex gap-[16px] items-center ">
-                                <img src="img/user-avatar.png" alt="Image of the writer"
+                                <img src="{{ $media->author->avatar ? asset('storage/' . $media->author->avatar) : asset('img/user-avatar.png') }}"
+                                    alt="Image of the writer"
                                     class="rounded-full w-[40px] h-[40px] object-center object-cover">
                                 <div class="writer-name line-clamp-1 font-[500]">{{ $media->author->name }}</div>
                             </div>

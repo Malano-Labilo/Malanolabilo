@@ -1,14 +1,15 @@
 <section class="bg-white-first flex justify-center">
     <div class="container px-[12px] py-[40px] flex flex-col gap-[24px]">
-        <div class="cards w-full h-[428px] flex gap-[16px] overflow-x-auto [&>*]:shrink-0">
+        <div class="cards w-full  h-[480px] flex items-center gap-[16px] overflow-x-auto [&>*]:shrink-0">
             @foreach ($medias as $m)
                 <a href="{{ route('media-home.media', $m->slug) }}"
-                    class="card w-[280px] lg:w-[320px] h-[400px] flex flex-col items-end">
+                    class="card w-[280px] lg:w-[320px] h-[400px] flex flex-col items-end border-[2px] border-dark-first hover:underline hover:scale-[1.02]">
                     <div class="w-full h-[220px]">
                         <img src="{{ $m->thumbnail }}" alt="{{ $m->title }}"
                             class="w-full h-full object-cover object-center">
                     </div>
-                    <div class="w-full h-[180px] p-[12px] flex flex-col gap-[8px] bg-white-first-40">
+                    <div
+                        class="w-full h-[180px] p-[12px] flex flex-col gap-[8px] border-[2px] border-t-dark-first bg-white-first-40">
                         <h3 class="text-[16px] font-[500]">{{ $m->title }}</h3>
                         <p class="line-clamp-4">
                             {{ $m->body }}</p>

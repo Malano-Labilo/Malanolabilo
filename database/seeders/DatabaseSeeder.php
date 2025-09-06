@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             MediaCategorySeeder::class,
             MediaSeeder::class,
-            // WorkSeeder::class,
+            WorkSeeder::class,
         ]);
     }
 }

@@ -19,15 +19,16 @@
                     </div>
                 </div>
             </form>
-            <div class="cards w-full flex gap-[16px] overflow-x-auto [&>*]:shrink-0">
+            <div class="cards w-full h-[480px] flex items-center gap-[16px] overflow-x-auto [&>*]:shrink-0">
                 @forelse ($medias as $m)
                     <a href="media/detail-media/{{ $m->slug }}"
-                        class="card w-[280px] lg:w-[320px] h-[400px] flex flex-col items-end">
-                        <div class="w-full h-[220px]">
+                        class="card w-[280px] lg:w-[320px] h-[400px] flex flex-col items-end border-2 border-dark-first hover:underline hover:scale-[1.01] du">
+                        <div class="w-full h-[220px] ">
                             <img src="{{ $m->thumbnail }}" alt="{{ $m->title }}"
                                 class="w-full h-full object-cover object-center">
                         </div>
-                        <div class="w-full h-[180px] p-[12px] flex flex-col gap-[8px] bg-white-first-40">
+                        <div
+                            class="w-full h-[180px] p-[12px] flex flex-col gap-[8px] bg-white-first-40 border-2 border-t-dark-first ">
                             <h3 class="text-[16px] font-[500]">{{ $m->title }}</h3>
                             <p class="line-clamp-4">
                                 {{ $m->body }}</p>
