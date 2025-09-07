@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Support\Str;
 use App\Models\MediaCategory;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class MediaCategorySeeder extends Seeder
 {
@@ -16,19 +17,19 @@ class MediaCategorySeeder extends Seeder
 
         MediaCategory::create([
             'name' => 'Music',
-            'slug' => 'music'
+            'slug' => Str::slug('music')
         ]);
         MediaCategory::create([
             'name' => 'Art',
-            'slug' => 'art'
+            'slug' => Str::slug('art')
         ]);
         MediaCategory::create([
             'name' => 'Education',
-            'slug' => 'education'
+            'slug' => Str::slug('education')
         ]);
         MediaCategory::create([
             'name' => 'Politics',
-            'slug' => 'politics'
+            'slug' => Str::slug('politics')
         ]);
     }
 }

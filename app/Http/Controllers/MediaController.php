@@ -59,14 +59,14 @@ class MediaController extends Controller
     }
 
     //Halaman untuk menampilkan media berdasarkan kategori
-    public function mediaCategories(MediaCategory $category)
+    public function mediaCategories(Media $medias)
     {
         $firstTitle = 'All Media';
-        $title = ' About ' . $category->name;
+        $title = ' About ' . $medias::first()->category->name;
         return view('pages.media.medias', [
             'firstTitle' => $firstTitle,
             'title' => $title,
-            // 'show' => $medias
+            'medias' => $medias::latest()->get()
         ]);
     }
 

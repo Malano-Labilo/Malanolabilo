@@ -18,10 +18,8 @@ return new class extends Migration
             $table->string('excerpt')->nullable(); //Ringkasan pendek yang biasanya ditampilkan dengan thumbnail
             $table->text('body'); // deskripsi isi lengkap dari media
             $table->string('thumbnail')->nullable(); //Thumbnail dari Media
-            $table->unsignedBigInteger('author_id'); //Penulis atau pembuat media
-            $table->foreign('author_id')->references('id')->on('users');
-            $table->unsignedBigInteger('category_id'); //Kategorinya
-            $table->foreign('category_id')->references('id')->on('media_categories');
+            $table->foreignId('author_id')->constrained(table: 'users', indexName: 'medias_author_id')->onDelete('cascade'); //Penulis atau pembuat media
+            $table->foreignId('category_id')->constrained(table: 'media_categories', indexName: 'medias_category_id')->onDelete('cascade'); //Kategori dari media
             $table->string('link')->nullable(); //Link menuju media yg ada diplatform lain (Wordpress, Medium, dll)
             $table->timestamp('published_at')->nullable(); //Waktu kapan media di Upload
 

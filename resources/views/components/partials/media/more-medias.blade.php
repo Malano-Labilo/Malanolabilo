@@ -1,6 +1,6 @@
 <section class="flex justify-center ">
     <div class="container px-[12px] py-[72px]">
-        <div class="mt-[32px] flex flex-col items-center gap-[32px]">
+        <div class="w-full mt-[32px] flex flex-col items-center gap-[32px]">
             <h3 class="capitalize text-[24px] font-spaceGrotesk font-[600]">{{ 'Medias' }}</h3>
 
             <form class="w-full flex justify-center">
@@ -19,7 +19,7 @@
                     </div>
                 </div>
             </form>
-            <div class="cards w-full h-[480px] flex items-center gap-[16px] overflow-x-auto [&>*]:shrink-0">
+            <div class="cards w-full py-[48px] flex flex-wrap justify-evenly gap-[28px] overflow-x-auto [&>*]:shrink-0">
                 @forelse ($medias as $m)
                     <a href="media/detail-media/{{ $m->slug }}"
                         class="card w-[280px] lg:w-[320px] h-[400px] flex flex-col items-end border-2 border-dark-first hover:underline hover:scale-[1.01] du">
@@ -33,7 +33,8 @@
                             <p class="line-clamp-4">
                                 {{ $m->body }}</p>
                             <div class="w-fit writer cursor-pointer flex gap-[16px] items-center ">
-                                <img src="img/user-avatar.png" alt="Image of the writer"
+                                <img src="{{ $m->author->avatar ? asset('storage/' . $m->author->avatar) : 'img/user-avatar.png' }}"
+                                    alt="Image of the writer"
                                     class="rounded-full w-[40px] h-[40px] object-center object-cover">
                                 <div class="writer-name line-clamp-1 font-[500]">{{ $m->author->name }}</div>
                             </div>

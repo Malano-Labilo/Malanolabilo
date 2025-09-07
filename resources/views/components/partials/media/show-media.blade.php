@@ -10,7 +10,7 @@
                     By <a href="{{ route('media-home.authors', $media->author->username) }}"
                         class="hover:underline">{{ $media->author->name }}</a>
                 </div>
-                <span> in </span><a href="{{ route('media-home.media', $media->category->slug) }}"
+                <span> in </span><a href="{{ route('media-home.media-categories', $media->category->slug) }}"
                     class="hover:underline">{{ $media->category->name }}</a>
             </div>
             <div class="">{{ $media->created_at }}</div>
