@@ -8,8 +8,8 @@
             <form class="w-full flex justify-center">
                 @if (request('category'))
                     <input type="hidden" name="category" value="{{ request('category') }}">
-                @elseif (request('user'))
-                    <input type="hidden" name="user" value="{{ request('username') }}">
+                @elseif (request('creator'))
+                    <input type="hidden" name="creator" value="{{ request('creator') }}">
                 @endif
                 <div class="relative">
                     <input

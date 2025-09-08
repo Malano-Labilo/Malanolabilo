@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Media extends Model
@@ -29,5 +31,11 @@ class Media extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(MediaCategory::class);
+    }
+
+    #[Scope]
+    public function filter(Builder $query, array $filters): Builder
+    {
+        return $query->when($filters['searching'] ?? false, fn($query, $search) => $query->where('title', 'like', '%' . $search . '%'));
     }
 }

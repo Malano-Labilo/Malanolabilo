@@ -4,15 +4,10 @@
             <h3 class="capitalize text-[24px] font-spaceGrotesk font-[600]">{{ 'Medias' }}</h3>
 
             <form class="w-full flex justify-center">
-                @if (request('category'))
-                    <input type="hidden" name="category" value="{{ request('category') }}">
-                @elseif (request('user'))
-                    <input type="hidden" name="user" value="{{ request('username') }}">
-                @endif
                 <div class="relative">
                     <input
                         class="w-[280px] max-w-[400px] pl-[16px] pr-[32px] py-[8px] placeholder:text-blue-first placeholder:bg-white-first placeholder:italic ..."
-                        placeholder="Search Projects... " type="text" name="searching" />
+                        placeholder="Search Projects... " type="text" name="searching" autofocus />
                     <div class="absolute top-[8px] left-[252px]">
                         <button class=""> <x-elements-icon name="search"
                                 class="w-[24px] cursor-pointer text-dark-first hover:text-blue-first" /></button>
@@ -22,7 +17,7 @@
             <div class="cards w-full py-[48px] flex flex-wrap justify-evenly gap-[28px] overflow-x-auto [&>*]:shrink-0">
                 @forelse ($medias as $m)
                     <a href="media/detail-media/{{ $m->slug }}"
-                        class="card w-[280px] lg:w-[320px] h-[400px] flex flex-col items-end border-2 border-dark-first hover:underline hover:scale-[1.01] du">
+                        class="card w-[280px] lg:w-[320px] h-[400px] flex flex-col items-end border-2 border-dark-first hover:underline hover:scale-[1.01]">
                         <div class="w-full h-[220px] ">
                             <img src="{{ $m->thumbnail }}" alt="{{ $m->title }}"
                                 class="w-full h-full object-cover object-center">

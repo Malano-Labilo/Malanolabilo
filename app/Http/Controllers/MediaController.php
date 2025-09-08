@@ -12,9 +12,10 @@ class MediaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $medias = Media::latest()->get();
+        $medias = Media::latest()->filter($request->only('searching'))->paginate(12)->withQueryString();
+
         return view('pages.media.index', [
             'title' => 'Media',
             'medias' => $medias
@@ -47,26 +48,28 @@ class MediaController extends Controller
     }
 
     //Halaman untuk menampilkan media berdasarkan Author
-    public function authors(Media $medias)
+    public function authors(Request $request)
     {
+        $medias = Media::latest()->filter($request->only('searching'))->paginate(12)->withQueryString();
         $firstTitle = 'All Media';
-        $title = ' By ' . $medias::first()->author->username;
+        $title = ' By ' . Media::first()->author->username;
         return view('pages.media.medias', [
             'firstTitle' => $firstTitle,
             'title' => $title,
-            'medias' => $medias::latest()->get()
+            'medias' => $medias
         ]);
     }
 
     //Halaman untuk menampilkan media berdasarkan kategori
-    public function mediaCategories(Media $medias)
+    public function mediaCategories(Request $request)
     {
+        $medias = Media::latest()->filter($request->only('searching'))->paginate(12)->withQueryString();
         $firstTitle = 'All Media';
-        $title = ' About ' . $medias::first()->category->name;
+        $title = ' About ' . Media::first()->category->name;
         return view('pages.media.medias', [
             'firstTitle' => $firstTitle,
             'title' => $title,
-            'medias' => $medias::latest()->get()
+            'medias' => $medias
         ]);
     }
 

@@ -647,6 +647,7 @@ namespace App\Models {
      * @method static \Illuminate\Database\Eloquent\Builder<Media>|Media wherePublishedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Media>|Media whereCreatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Media>|Media whereUpdatedAt($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Media>|Media filter()
      * @method static \Illuminate\Database\Eloquent\Builder<Media>|Media newModelQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<Media>|Media newQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<Media>|Media query()
