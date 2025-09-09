@@ -6,6 +6,11 @@
                 <h3 class="capitalize text-[24px] font-spaceGrotesk font-[600]">{{ $title }}</h3>
             </div>
             <form class="w-full flex justify-center">
+                @if (request('category'))
+                    <input type="hidden" name="category" value="{{ request('category') }}">
+                @elseif (request('author'))
+                    <input type="hidden" name="author" value="{{ request('author') }}">
+                @endif
                 <div class="relative">
                     <input
                         class="w-[280px] max-w-[400px] pl-[16px] pr-[32px] py-[8px] placeholder:text-blue-first placeholder:bg-white-first placeholder:italic ..."
@@ -16,6 +21,9 @@
                     </div>
                 </div>
             </form>
+            <div class="w-full flex justify-end">
+                {{ $medias->links() }}
+            </div>
             <div class="cards w-full flex flex-wrap gap-[52px] justify-evenly [&>*]:shrink-0">
                 @forelse ($medias as $media)
                     <a href="{{ route('media-home.media', $media->slug) }}"

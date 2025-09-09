@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class MediaCategory extends Model
 {
-
     public function media(): HasMany
     {
         return $this->hasMany(Media::class);

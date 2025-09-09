@@ -2,7 +2,7 @@
     <div class="container px-[12px] py-[72px]">
         <div class="mt-[32px] flex flex-col items-center gap-[32px]">
             <div class="flex flex-col items-center font-[600]">
-                <span class="text-">{{ $firstTitle }}</span>
+                <span class="">{{ $firstTitle }}</span>
                 <h3 class="capitalize text-[24px] font-spaceGrotesk font-[600]">{{ $title }}</h3>
             </div>
             <form class="w-full flex justify-center">
@@ -27,7 +27,7 @@
                 @forelse ($show as $s)
                     <div class="card w-[296px] border-[2px] border-dark-first">
                         <div class="h-[280px] w-full">
-                            <img src="{{ $s->thumbnail ? asset('storage/' . $s->thumbnail) : asset('img/default-thumbnail.jpg') }}"
+                            <img src="{{ $s->thumbnail ? asset($s->thumbnail) : asset('img/default-thumbnail.jpg') }}"
                                 alt="{{ $s->title }}" class="w-full h-full object-cover object-center" />
                         </div>
                         <div class="w-full py-[24px] px-[12px] flex flex-col gap-[16px] bg-blue-plus">

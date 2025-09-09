@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\User;
 use App\Models\Media;
 use App\Models\MediaCategory;
@@ -35,24 +36,21 @@ class MediaController extends Controller
         //
     }
 
-    public function medias()
+    public function medias(Request $request)
     {
-        // $medias = Media::latest()->
+        $medias = Media::latest()->filter($request->only(['searching', 'author', 'category']))->paginate(12)->withQueryString();
         $firstTitle = 'This Is';
         $title = 'All Media ';
-        return view('pages.media.medias', [
-            'firstTitle' => $firstTitle,
-            'title' => $title,
-            // 'show' => $medias
-        ]);
-    }
 
-    //Halaman untuk menampilkan media berdasarkan Author
-    public function authors(Request $request)
-    {
-        $medias = Media::latest()->filter($request->only('searching'))->paginate(12)->withQueryString();
-        $firstTitle = 'All Media';
-        $title = ' By ' . Media::first()->author->username;
+        if ($request->filled('author')) { //Jika query string ?author=
+            $firstTitle = 'Media By Author';
+            $title = User::where('username', $request->author)->value('username'); //hanya ambil kolom username
+        }
+        if ($request->filled('category')) { //Jika query string ?category=
+            $firstTitle = 'Media About';
+            $title = MediaCategory::where('name', $request->category)->value('slug'); //hanya ambil kolom name
+        }
+
         return view('pages.media.medias', [
             'firstTitle' => $firstTitle,
             'title' => $title,
@@ -60,18 +58,31 @@ class MediaController extends Controller
         ]);
     }
 
-    //Halaman untuk menampilkan media berdasarkan kategori
-    public function mediaCategories(Request $request)
-    {
-        $medias = Media::latest()->filter($request->only('searching'))->paginate(12)->withQueryString();
-        $firstTitle = 'All Media';
-        $title = ' About ' . Media::first()->category->name;
-        return view('pages.media.medias', [
-            'firstTitle' => $firstTitle,
-            'title' => $title,
-            'medias' => $medias
-        ]);
-    }
+    // //Halaman untuk menampilkan media berdasarkan Author
+    // public function authors(Request $request)
+    // {
+    //     $medias = Media::latest()->filter($request->only('searching'))->paginate(12)->withQueryString();
+    //     $firstTitle = 'All Media';
+    //     $title = ' By ' . Media::where('author', $request->author)->value('username');
+    //     return view('pages.media.medias', [
+    //         'firstTitle' => $firstTitle,
+    //         'title' => $title,
+    //         'medias' => $medias
+    //     ]);
+    // }
+
+    // //Halaman untuk menampilkan media berdasarkan kategori
+    // public function mediaCategories(Request $request)
+    // {
+    //     $medias = Media::latest()->filter($request->only('searching'))->paginate(12)->withQueryString();
+    //     $firstTitle = 'All Media';
+    //     $title = ' About ' . Media::where('category', $request->category)->value('name');
+    //     return view('pages.media.medias', [
+    //         'firstTitle' => $firstTitle,
+    //         'title' => $title,
+    //         'medias' => $medias
+    //     ]);
+    // }
 
     // Halaman untuk menampilkan salah satu media berdasarkan slug
     public function show(Media $media)

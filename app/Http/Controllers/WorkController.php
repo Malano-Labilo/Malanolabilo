@@ -32,7 +32,7 @@ class WorkController extends Controller
     //halaman Show All Works atau menampilkan semua project
     public function works(Request $request)
     {
-        $works = Work::latest()->filter($request->only(['searching', 'category', 'creator']))->paginate(10)->withQueryString();
+        $works = Work::latest()->filter($request->only(['searching', 'category', 'creator']))->paginate(12)->withQueryString();
         // $work = Work::with('category')->latest()->first();
         //Nilai default dari title
         $title = 'All Projects';
@@ -41,6 +41,7 @@ class WorkController extends Controller
         if ($request->filled('category')) {
             $firstTitle = 'Projects By Category';
             $title = Category::where('slug', $request->category)->value('name'); //hanya ambil kolom name
+
         }
         //Jika query string ?user=
         if ($request->filled('creator')) {

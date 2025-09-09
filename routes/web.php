@@ -29,8 +29,8 @@ Route::get('/works/{work:slug}', [WorkController::class, 'work'])->name('works.w
 Route::get('/media', [MediaController::class, 'index'])->name('media-home');
 Route::get('/media/detail-media/{media:slug}', [MediaController::class, 'show'])->name('media-home.media');
 Route::get('/media/all-media', [MediaController::class, 'medias'])->name('media-home.medias');
-Route::get('/media/authors/{user:username}', [MediaController::class, 'authors'])->name('media-home.authors');
-Route::get('/media/categories/{mediacategory:slug}', [MediaController::class, 'mediaCategories'])->name('media-home.media-categories');
+// Route::get('/media/authors/{media:author}', [MediaController::class, 'authors'])->name('media-home.authors');
+// Route::get('/media/categories/{media:category}', [MediaController::class, 'mediaCategories'])->name('media-home.media-categories');
 
 //Halaman Contact
 // Route::get('/contact', function(){
